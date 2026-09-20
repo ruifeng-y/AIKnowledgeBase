@@ -1,0 +1,37 @@
+{
+  "name": "@akb/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "NestJS API for AI Knowledge Base",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src",
+    "test": "vitest run",
+    "dev": "ts-node --transpile-only src/main.ts",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@akb/config": "workspace:*",
+    "@akb/contracts": "workspace:*",
+    "@akb/utils": "workspace:*",
+    "@nestjs/common": "^11.0.7",
+    "@nestjs/core": "^11.0.7",
+    "@nestjs/platform-express": "^11.0.7",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.0.7",
+    "@types/express": "^5.0.0",
+    "@types/supertest": "^6.0.2",
+    "eslint": "^9.18.0",
+    "supertest": "^7.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "unplugin-swc": "^1.6.0",
+    "vitest": "^3.0.4"
+  }
+}
