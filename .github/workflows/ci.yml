@@ -32,6 +32,9 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Docker Compose config check
+        run: docker compose config --quiet
+
       - name: Format check
         run: pnpm format:check
 

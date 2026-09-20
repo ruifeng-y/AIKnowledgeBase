@@ -2,8 +2,8 @@
 
 Enterprise AI Knowledge Base / RAG platform.
 
-> **V0.4-A status:** this repository currently contains only the **Monorepo engineering skeleton**.
-> Features such as PostgreSQL, pgvector, Redis, BullMQ, MinIO, RAG, Embedding, Reranker, LLM, Chat, and Citation are **not implemented yet**.
+> **Current status:** V0.4-A monorepo skeleton + **V0.4-B local Docker infrastructure** (PostgreSQL 16 + pgvector, Redis 7, MinIO).
+> Application code is **not** wired to these services yet. Prisma, migrations, BullMQ, RAG, Auth, LLM/Chat/Citation are **not implemented yet**.
 
 ## 1. 项目介绍
 
@@ -61,6 +61,7 @@ apps → packages
 
 - Node.js >= 20
 - pnpm 10.x（本仓库 `packageManager` 为 `pnpm@10.28.0`）
+- Docker + Docker Compose（本地基础设施）
 
 ## 5. 安装
 
@@ -112,36 +113,80 @@ pnpm format
 pnpm format:check
 ```
 
-## 12. 当前 V0.4-A 范围
+## 12. Local Infrastructure（V0.4-B）
 
-已完成：
+本地开发基础设施由 Docker Compose 启动，**仅用于本地开发，不代表生产部署方案**。
+
+| Service | 说明 | Host Port |
+|---------|------|-----------|
+| postgres | PostgreSQL 16 + pgvector | 5432 |
+| redis | Redis 7 | 6379 |
+| minio | S3-compatible Object Storage | 9000 (API) / 9001 (Console) |
+
+默认凭据见 `.env.example`（开发用 `change_me`，勿用于生产）。`.env` 已被 `.gitignore` 忽略。
+
+```bash
+# 启动
+docker compose up -d
+
+# 状态
+docker compose ps
+
+# 日志
+docker compose logs -f
+
+# 停止（保留 volume 数据）
+docker compose down
+
+# 停止并删除 volume（会清空 PostgreSQL / Redis / MinIO 数据）
+docker compose down -v
+```
+
+MinIO 初始化容器会在启动时幂等创建 bucket：`ai-knowledge-base`。
+
+可选检查脚本：
+
+```bash
+sh infra/scripts/verify-infra.sh
+```
+
+当前 **未** 将 `apps/api` / `apps/worker` 接入 PostgreSQL / Redis / MinIO；接入属于后续阶段。
+
+## 13. 当前已完成范围
+
+V0.4-A：
 
 - pnpm workspace + Turborepo
 - `apps/web` / `apps/api` / `apps/worker`
 - `packages/*` 骨架
-- TypeScript strict
-- ESLint / Prettier / EditorConfig
-- Vitest 基础测试
+- TypeScript strict / ESLint / Prettier / Vitest
 - `GET /health` + `X-Request-ID`
 - GitHub Actions CI
-- `.env.example` / README
+
+V0.4-B：
+
+- `docker-compose.yml`：PostgreSQL 16 + pgvector / Redis 7 / MinIO
+- named volumes + healthchecks + MinIO bucket 初始化
+- `.env.example` 基础设施变量
+- README Local Infrastructure 说明
 
 **未实现（后续阶段）：**
 
-- PostgreSQL / pgvector / Prisma / migrations
-- Redis / BullMQ / MinIO / S3 / Docker Compose
+- Prisma / migrations / seed / repository / 业务表
+- API/Worker 连接数据库或 Redis/BullMQ
 - Auth / JWT / API Key
 - Workspace / Knowledge Space / Document 业务 CRUD
-- RAG（Parser / Chunking / Embedding / Hybrid Search / Reranker / Context Builder）
-- LLM / Chat / SSE / Citation
+- RAG / Embedding / Reranker / LLM / Chat / SSE / Citation
+- ObjectStorage Adapter / 文件上传业务
 
-## 13. 后续阶段说明
+## 14. 后续阶段说明
 
 规划中的工程阶段（详见 V0.3 文档）：
 
 ```text
-V0.4-A  Monorepo 初始化          ← 当前
-V0.4-B  Docker 基础设施
+V0.4-A  Monorepo 初始化
+V0.4-B  Docker 基础设施          ← 当前
+V0.4-C  Database Schema
 V0.4-C  Database Schema
 V0.4-D  NestJS Architecture
 V0.4-E  Auth / Workspace
