@@ -18,6 +18,11 @@ import { DocumentApplicationService } from './application/documents.application.
 import { DocumentProcessingApplicationService } from './application/document-processing.application.service';
 import { DocumentsController, SpaceDocumentsController } from './presentation/documents.controller';
 import { DocumentProcessingController } from './presentation/document-processing.controller';
+import { DocumentChunksController } from './presentation/document-chunks.controller';
+import { DocumentChunksApplicationService } from './application/document-chunks.application.service';
+import { KNOWLEDGE_CHUNK_REPOSITORY } from './domain/knowledge-chunk.repository.port';
+import { KnowledgeChunkRepositoryAdapter } from '../../infrastructure/database/knowledge-chunk.repository.adapter';
+import type { KnowledgeChunkRepositoryPort } from './domain/knowledge-chunk.repository.port';
 import { PROCESSING_JOB_REPOSITORY } from './domain/processing-job.repository.port';
 import { ProcessingJobRepositoryAdapter } from '../../infrastructure/database/processing-job.repository.adapter';
 import type { ObjectStoragePort } from '../../infrastructure/storage/object-storage.port';
@@ -25,13 +30,19 @@ import type { ProcessingJobRepositoryPort } from './domain/processing-job.reposi
 
 @Module({
   imports: [AppConfigModule, StorageModule, QueueModule, WorkspacesModule],
-  controllers: [SpaceDocumentsController, DocumentsController, DocumentProcessingController],
+  controllers: [
+    SpaceDocumentsController,
+    DocumentsController,
+    DocumentProcessingController,
+    DocumentChunksController,
+  ],
   providers: [
     DocumentPolicyProvider,
     { provide: DOCUMENT_REPOSITORY, useClass: DocumentRepositoryAdapter },
     { provide: KNOWLEDGE_SPACE_REPOSITORY, useClass: KnowledgeSpaceRepositoryAdapter },
     { provide: WORKSPACE_REPOSITORY, useClass: WorkspaceRepositoryAdapter },
     { provide: PROCESSING_JOB_REPOSITORY, useClass: ProcessingJobRepositoryAdapter },
+    { provide: KNOWLEDGE_CHUNK_REPOSITORY, useClass: KnowledgeChunkRepositoryAdapter },
     {
       provide: AuthorizationService,
       useFactory: (
@@ -60,7 +71,18 @@ import type { ProcessingJobRepositoryPort } from './domain/processing-job.reposi
       ) => new DocumentProcessingApplicationService(authorization, queue, jobs),
       inject: [AuthorizationService, JOB_QUEUE, PROCESSING_JOB_REPOSITORY],
     },
+    {
+      provide: DocumentChunksApplicationService,
+      useFactory: (authorization: AuthorizationService, chunks: KnowledgeChunkRepositoryPort) =>
+        new DocumentChunksApplicationService(authorization, chunks),
+      inject: [AuthorizationService, KNOWLEDGE_CHUNK_REPOSITORY],
+    },
   ],
-  exports: [DocumentApplicationService, AuthorizationService, DocumentProcessingApplicationService],
+  exports: [
+    DocumentApplicationService,
+    AuthorizationService,
+    DocumentProcessingApplicationService,
+    DocumentChunksApplicationService,
+  ],
 })
 export class DocumentsModule {}

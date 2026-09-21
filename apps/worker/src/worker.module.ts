@@ -9,7 +9,7 @@ import { WorkerMinioObjectStorage } from './api-storage/worker-minio-storage';
       provide: 'WORKER_STORAGE',
       useFactory: () =>
         new WorkerMinioObjectStorage({
-          endPoint: process.env['S3_ENDPOINT'] ?? 'http://localhost:9000',
+          endPoint: process.env['S3_ENDPOINT'] ?? 'http://127.0.0.1:9000',
           accessKey: process.env['S3_ACCESS_KEY_ID'] ?? 'minioadmin',
           secretKey: process.env['S3_SECRET_ACCESS_KEY'] ?? 'change_me',
           bucket: process.env['S3_BUCKET'] ?? 'ai-knowledge-base',
@@ -30,7 +30,9 @@ import { WorkerMinioObjectStorage } from './api-storage/worker-minio-storage';
             host: process.env['REDIS_HOST'] ?? 'localhost',
             port: Number(process.env['REDIS_PORT'] ?? 6379),
           },
-          (payload) => service.process(payload),
+          async (payload) => {
+            await service.process(payload);
+          },
         ),
       inject: [DocumentProcessingService],
     },
