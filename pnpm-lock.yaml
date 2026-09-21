@@ -35,6 +35,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@akb/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
       '@akb/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -160,6 +163,9 @@ importers:
 
   apps/worker:
     dependencies:
+      '@akb/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
       '@akb/config':
         specifier: workspace:*
         version: link:../../packages/config

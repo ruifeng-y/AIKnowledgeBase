@@ -5,11 +5,13 @@ import {
   knowledgeChunkRepository,
   processingJobRepository,
 } from '@akb/db';
+import { EmbeddingError } from '@akb/ai';
 import type { ObjectStoragePort } from '../api-storage/object-storage.port';
 import { ParserError } from '../parsers/parser.port';
 import { parserRegistry } from '../parsers/parser-registry';
 import { StructureAwareChunkingStrategy } from '../chunking/structure-aware-chunking.strategy';
 import { ChunkingError, type ChunkingStats } from '../chunking/chunking.types';
+import { EmbeddingService } from '../embedding/embedding.service';
 
 export interface DocumentProcessJobPayload {
   documentId: string;
@@ -22,9 +24,12 @@ export class DocumentProcessingService {
     private readonly storage: ObjectStoragePort,
     private readonly registry = parserRegistry,
     private readonly chunking = new StructureAwareChunkingStrategy(),
+    private readonly embedding = EmbeddingService.createDefault(),
   ) {}
 
-  async process(payload: DocumentProcessJobPayload): Promise<ChunkingStats | null> {
+  async process(
+    payload: DocumentProcessJobPayload,
+  ): Promise<(ChunkingStats & { embedding?: unknown }) | null> {
     const { documentId, documentVersionId, jobId } = payload;
     const context = await documentProcessingRepository.findVersionContext(documentVersionId);
     if (!context || context.documentId !== documentId) {
@@ -85,11 +90,16 @@ export class DocumentProcessingService {
         }),
       );
 
+      const embeddingStats = await this.embedding.embedDocumentVersion({
+        documentId,
+        documentVersionId,
+      });
+
       await documentProcessingRepository.setDocumentStatus(documentId, 'READY');
       if (job) {
         await processingJobRepository.markCompleted(job.id);
       }
-      return stats;
+      return { ...stats, embedding: embeddingStats };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'processing failed';
       const code =
@@ -97,13 +107,17 @@ export class DocumentProcessingService {
           ? error.code
           : error instanceof ChunkingError
             ? error.code
-            : 'DOCUMENT_PROCESSING_ERROR';
+            : error instanceof EmbeddingError
+              ? error.code
+              : 'DOCUMENT_PROCESSING_ERROR';
       const retryable =
         error instanceof ParserError
           ? error.retryable
           : error instanceof ChunkingError
             ? false
-            : true;
+            : error instanceof EmbeddingError
+              ? false
+              : true;
       if (job) {
         await processingJobRepository.markFailed(job.id, `${code}: ${message}`);
       }

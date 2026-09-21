@@ -12,6 +12,7 @@
     "start": "node dist/main.js"
   },
   "dependencies": {
+    "@akb/ai": "workspace:*",
     "@akb/config": "workspace:*",
     "@akb/contracts": "workspace:*",
     "@akb/db": "workspace:*",
