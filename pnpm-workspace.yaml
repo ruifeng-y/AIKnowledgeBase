@@ -5,3 +5,11 @@ packages:
 onlyBuiltDependencies:
   - esbuild
   - '@swc/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - prisma
+  - '@prisma/engines-version'
+  - prisma-engines
+  - bufferutil
+  - utf-8-validate
+  - '@nestjs/core'

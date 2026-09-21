@@ -1,2 +1,6 @@
-/** Package skeleton only. Database client/schema arrive in V0.4-B/C. */
+export { prisma, disconnectPrisma } from './client';
+export * from './types';
+export * from './repositories';
+
+/** Package marker retained for skeleton compatibility. */
 export const DB_PACKAGE = '@akb/db' as const;

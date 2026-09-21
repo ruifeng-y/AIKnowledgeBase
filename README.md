@@ -150,7 +150,38 @@ MinIO 初始化容器会在启动时幂等创建 bucket：`ai-knowledge-base`。
 sh infra/scripts/verify-infra.sh
 ```
 
-当前 **未** 将 `apps/api` / `apps/worker` 接入 PostgreSQL / Redis / MinIO；接入属于后续阶段。
+当前 **未** 将 `apps/api` / `apps/worker` 接入 PostgreSQL / Redis / MinIO；业务 API 接入属于后续阶段。
+
+## 12b. Database Development（V0.4-C）
+
+本地开发使用 Prisma + PostgreSQL 16 + pgvector。
+
+```env
+DATABASE_URL=postgresql://akb:change_me@localhost:5432/ai_knowledge_base
+```
+
+复制 `.env.example` 为 `.env`（已在 `.gitignore`），不要提交真实密码。
+
+```bash
+# 生成 Prisma Client
+pnpm --filter @akb/db prisma:generate
+
+# 开发迁移（创建/应用）
+pnpm --filter @akb/db prisma:migrate
+
+# 部署迁移（CI/全新环境）
+pnpm --filter @akb/db prisma:deploy
+
+# 迁移状态
+pnpm --filter @akb/db prisma:status
+
+# Schema 验证（13 表 / vector / TSVECTOR / GIN / FK / UNIQUE）
+pnpm --filter @akb/db db:verify
+```
+
+访问数据库请通过 `@akb/db`（`prisma` + repositories），不要在 apps 中自行 `new PrismaClient()`。
+
+当前仅落地数据库模型与基础 repository，**未实现** Auth / Document API / RAG / LLM。
 
 ## 13. 当前已完成范围
 
@@ -170,14 +201,21 @@ V0.4-B：
 - `.env.example` 基础设施变量
 - README Local Infrastructure 说明
 
+V0.4-C：
+
+- Prisma schema + migration：13 张核心业务表
+- pgvector `embedding_records.embedding` + FTS `search_vector` + GIN
+- `@akb/db`：Prisma Client + 基础 repositories
+- Schema / persistence 验证脚本
+
 **未实现（后续阶段）：**
 
-- Prisma / migrations / seed / repository / 业务表
-- API/Worker 连接数据库或 Redis/BullMQ
-- Auth / JWT / API Key
-- Workspace / Knowledge Space / Document 业务 CRUD
-- RAG / Embedding / Reranker / LLM / Chat / SSE / Citation
-- ObjectStorage Adapter / 文件上传业务
+- Auth / JWT / API Key service
+- Workspace / Knowledge Space / Document 业务 API
+- File Upload / ObjectStorage Adapter
+- BullMQ / Document·Embedding·Indexing Processor
+- RAG / Embedding Provider / Hybrid Search / Reranker / Context Builder
+- LLM / Chat / SSE / Citation
 
 ## 14. 后续阶段说明
 
@@ -185,8 +223,9 @@ V0.4-B：
 
 ```text
 V0.4-A  Monorepo 初始化
-V0.4-B  Docker 基础设施          ← 当前
-V0.4-C  Database Schema
+V0.4-B  Docker 基础设施
+V0.4-C  Database Schema          ← 当前
+V0.4-D  NestJS Architecture
 V0.4-C  Database Schema
 V0.4-D  NestJS Architecture
 V0.4-E  Auth / Workspace

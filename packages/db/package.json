@@ -2,7 +2,7 @@
   "name": "@akb/db",
   "version": "0.0.0",
   "private": true,
-  "description": "Database access package skeleton (V0.4-A: no ORM/driver yet)",
+  "description": "Database access package: Prisma schema, client, repositories",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -13,14 +13,29 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "build": "prisma generate && tsc -p tsconfig.json",
+    "typecheck": "prisma generate && tsc -p tsconfig.json --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
-    "dev": "tsc -p tsconfig.json --watch"
+    "dev": "tsc -p tsconfig.json --watch",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:status": "prisma migrate status",
+    "db:verify": "tsx scripts/verify-schema.ts",
+    "db:persist-test": "tsx scripts/persistence-test.ts",
+    "db:persist-verify": "tsx scripts/persistence-verify.ts",
+    "db:persist-cleanup": "tsx scripts/persistence-cleanup.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.7",
+    "dotenv": "^16.4.7",
     "eslint": "^9.18.0",
+    "prisma": "^6.19.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vitest": "^3.0.4"
   }

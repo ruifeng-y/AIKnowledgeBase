@@ -1,0 +1,292 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum DocumentSourceType {
+  UPLOAD
+  URL
+  GITHUB
+  NOTION
+  TEXT
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
+  ARCHIVED
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum ProcessingJobType {
+  PARSE
+  CHUNK
+  EMBED
+  INDEX
+}
+
+enum ProcessingJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique @db.VarChar(320)
+  passwordHash String     @map("password_hash") @db.Text
+  name         String     @db.VarChar(100)
+  avatarUrl    String?    @map("avatar_url") @db.Text
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamp(3)
+  workspaces   Workspace[]
+  conversations Conversation[]
+
+  @@map("users")
+}
+
+model Workspace {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String    @db.VarChar(120)
+  slug        String    @unique @db.VarChar(120)
+  description String?   @db.Text
+  ownerId     String    @map("owner_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(3)
+  owner       User      @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  spaces      KnowledgeSpace[]
+  apiKeys     ApiKey[]
+
+  @@index([ownerId])
+  @@map("workspaces")
+}
+
+model KnowledgeSpace {
+  id          String   @id @default(uuid()) @db.Uuid
+  workspaceId String   @map("workspace_id") @db.Uuid
+  name        String   @db.VarChar(120)
+  slug        String   @db.VarChar(120)
+  description String?  @db.Text
+  settings    Json     @default("{}") @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp(3)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  documents   Document[]
+  chunks      KnowledgeChunk[]
+  conversations Conversation[]
+  jobs        ProcessingJob[]
+
+  @@unique([workspaceId, slug])
+  @@index([workspaceId])
+  @@map("knowledge_spaces")
+}
+
+model Document {
+  id                String           @id @default(uuid()) @db.Uuid
+  knowledgeSpaceId  String           @map("knowledge_space_id") @db.Uuid
+  title             String           @db.VarChar(255)
+  sourceType        DocumentSourceType @default(UPLOAD) @map("source_type")
+  sourceUri         String?          @map("source_uri") @db.Text
+  mimeType          String?          @map("mime_type") @db.VarChar(100)
+  status            DocumentStatus   @default(PENDING)
+  currentVersionId  String?          @map("current_version_id") @db.Uuid
+  metadata          Json             @default("{}") @db.JsonB
+  createdAt         DateTime         @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt         DateTime         @updatedAt @map("updated_at") @db.Timestamp(3)
+  knowledgeSpace    KnowledgeSpace   @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  versions          DocumentVersion[]
+  chunks            KnowledgeChunk[]
+  jobs              ProcessingJob[]
+
+  @@index([knowledgeSpaceId])
+  @@index([status])
+  @@index([sourceType])
+  @@map("documents")
+}
+
+model DocumentVersion {
+  id           String   @id @default(uuid()) @db.Uuid
+  documentId   String   @map("document_id") @db.Uuid
+  version      Int
+  storageKey   String   @map("storage_key") @db.Text
+  contentHash  String   @map("content_hash") @db.VarChar(128)
+  fileSize     BigInt   @map("file_size")
+  mimeType     String?  @map("mime_type") @db.VarChar(100)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  document     Document @relation(fields: [documentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sections     DocumentSection[]
+  chunks       KnowledgeChunk[]
+  jobs         ProcessingJob[]
+
+  @@unique([documentId, version])
+  @@index([documentId])
+  @@map("document_versions")
+}
+
+model DocumentSection {
+  id                 String   @id @default(uuid()) @db.Uuid
+  documentVersionId  String   @map("document_version_id") @db.Uuid
+  parentId           String?  @map("parent_id") @db.Uuid
+  heading            String   @db.Text
+  level              Int
+  sectionOrder       Int      @map("section_order")
+  content            String   @db.Text
+  metadata           Json     @default("{}") @db.JsonB
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  documentVersion    DocumentVersion @relation(fields: [documentVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  parent             DocumentSection? @relation("SectionTree", fields: [parentId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  children           DocumentSection[] @relation("SectionTree")
+  chunks             KnowledgeChunk[]
+
+  @@index([documentVersionId])
+  @@index([parentId])
+  @@map("document_sections")
+}
+
+model KnowledgeChunk {
+  id                 String   @id @default(uuid()) @db.Uuid
+  knowledgeSpaceId   String   @map("knowledge_space_id") @db.Uuid
+  documentId         String   @map("document_id") @db.Uuid
+  documentVersionId  String   @map("document_version_id") @db.Uuid
+  sectionId          String?  @map("section_id") @db.Uuid
+  chunkIndex         Int      @map("chunk_index")
+  content            String   @db.Text
+  tokenCount         Int?     @map("token_count")
+  metadata           Json     @default("{}") @db.JsonB
+  searchVector       Unsupported("tsvector")? @map("search_vector")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime @default(now()) @map("updated_at") @db.Timestamp(3)
+  knowledgeSpace     KnowledgeSpace @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  document           Document @relation(fields: [documentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  documentVersion    DocumentVersion @relation(fields: [documentVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  section            DocumentSection? @relation(fields: [sectionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  embeddings         EmbeddingRecord[]
+  sources            MessageSource[]
+
+  @@index([knowledgeSpaceId])
+  @@index([documentId])
+  @@index([documentVersionId])
+  @@index([sectionId])
+  @@map("knowledge_chunks")
+}
+
+model EmbeddingRecord {
+  id         String   @id @default(uuid()) @db.Uuid
+  chunkId    String   @map("chunk_id") @db.Uuid
+  provider   String   @db.VarChar(100)
+  model      String   @db.VarChar(200)
+  dimensions Int
+  embedding  Unsupported("vector") @map("embedding")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt  DateTime @default(now()) @map("updated_at") @db.Timestamp(3)
+  chunk      KnowledgeChunk @relation(fields: [chunkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([chunkId])
+  @@index([provider, model])
+  @@map("embedding_records")
+}
+
+model Conversation {
+  id               String   @id @default(uuid()) @db.Uuid
+  knowledgeSpaceId String   @map("knowledge_space_id") @db.Uuid
+  userId           String   @map("user_id") @db.Uuid
+  title            String   @db.VarChar(200)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamp(3)
+  knowledgeSpace   KnowledgeSpace @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user             User @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  messages         Message[]
+
+  @@index([knowledgeSpaceId])
+  @@index([userId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String        @id @default(uuid()) @db.Uuid
+  conversationId String        @map("conversation_id") @db.Uuid
+  role           MessageRole
+  content        String        @db.Text
+  metadata       Json          @default("{}") @db.JsonB
+  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamp(3)
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sources        MessageSource[]
+
+  @@index([conversationId])
+  @@map("messages")
+}
+
+model MessageSource {
+  id         String   @id @default(uuid()) @db.Uuid
+  messageId  String   @map("message_id") @db.Uuid
+  chunkId    String   @map("chunk_id") @db.Uuid
+  rank       Int
+  score      Float?   @db.DoublePrecision
+  citationId String?  @map("citation_id") @db.VarChar(50)
+  metadata   Json     @default("{}") @db.JsonB
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  message    Message @relation(fields: [messageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  chunk      KnowledgeChunk @relation(fields: [chunkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([messageId])
+  @@index([chunkId])
+  @@map("message_sources")
+}
+
+model ProcessingJob {
+  id                 String   @id @default(uuid()) @db.Uuid
+  knowledgeSpaceId   String   @map("knowledge_space_id") @db.Uuid
+  documentId         String   @map("document_id") @db.Uuid
+  documentVersionId  String?  @map("document_version_id") @db.Uuid
+  type               ProcessingJobType
+  status             ProcessingJobStatus @default(PENDING)
+  attempts           Int      @default(0)
+  error              String?  @db.Text
+  payload            Json     @default("{}") @db.JsonB
+  startedAt          DateTime? @map("started_at") @db.Timestamp(3)
+  completedAt        DateTime? @map("completed_at") @db.Timestamp(3)
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updatedAt          DateTime @updatedAt @map("updated_at") @db.Timestamp(3)
+  knowledgeSpace     KnowledgeSpace @relation(fields: [knowledgeSpaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  document           Document @relation(fields: [documentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  documentVersion    DocumentVersion? @relation(fields: [documentVersionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@index([documentId])
+  @@index([status])
+  @@index([type])
+  @@map("processing_jobs")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid()) @db.Uuid
+  workspaceId String    @map("workspace_id") @db.Uuid
+  name        String    @db.VarChar(100)
+  keyHash     String    @unique @map("key_hash") @db.VarChar(128)
+  keyPrefix   String    @map("key_prefix") @db.VarChar(20)
+  lastUsedAt  DateTime? @map("last_used_at") @db.Timestamp(3)
+  expiresAt   DateTime? @map("expires_at") @db.Timestamp(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  revokedAt   DateTime? @map("revoked_at") @db.Timestamp(3)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([workspaceId])
+  @@map("api_keys")
+}
