@@ -24,6 +24,7 @@ export interface VectorSearchRow {
 }
 
 export const VECTOR_SEARCH_REPOSITORY = Symbol('VECTOR_SEARCH_REPOSITORY');
+export const EMBEDDING_PROVIDER = Symbol('EMBEDDING_PROVIDER');
 
 export interface VectorSearchRepositoryPort {
   search(params: VectorSearchParams): Promise<VectorSearchRow[]>;

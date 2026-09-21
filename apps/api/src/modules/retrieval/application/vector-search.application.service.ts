@@ -1,11 +1,5 @@
-import type { EmbeddingModelConfig, EmbeddingProviderPort } from '@akb/ai';
-import {
-  EmbeddingError,
-  loadEmbeddingConfig,
-  MockEmbeddingProvider,
-  normalizeEmbeddingText,
-  validateEmbeddingVector,
-} from '@akb/ai';
+import type { EmbeddingProviderPort } from '@akb/ai';
+import { EmbeddingError, normalizeEmbeddingText, validateEmbeddingVector } from '@akb/ai';
 import type { AuthorizationService } from '../../shared/application/authorization.service';
 import {
   normalizeThreshold,
@@ -22,24 +16,10 @@ export interface VectorSearchServiceDeps {
   authorization: AuthorizationService;
   vectorSearch: VectorSearchRepositoryPort;
   embeddingProvider: EmbeddingProviderPort;
-  embeddingConfig: EmbeddingModelConfig;
 }
 
 export class VectorSearchApplicationService {
   constructor(private readonly deps: VectorSearchServiceDeps) {}
-
-  static createDefault(
-    authorization: AuthorizationService,
-    vectorSearch: VectorSearchRepositoryPort,
-  ): VectorSearchApplicationService {
-    const embeddingConfig = loadEmbeddingConfig(process.env);
-    return new VectorSearchApplicationService({
-      authorization,
-      vectorSearch,
-      embeddingProvider: new MockEmbeddingProvider(embeddingConfig),
-      embeddingConfig,
-    });
-  }
 
   async search(
     userId: string,
@@ -52,7 +32,7 @@ export class VectorSearchApplicationService {
     const topK = normalizeTopK(input.topK);
     const threshold = normalizeThreshold(input.threshold);
     const identity = this.deps.embeddingProvider.identity();
-    const dimension = this.deps.embeddingConfig.dimension;
+    const dimension = identity.dimension;
 
     let versionId: string | null = null;
     if (input.versionId !== undefined && input.versionId !== '') {
@@ -74,11 +54,11 @@ export class VectorSearchApplicationService {
       validateEmbeddingVector(embedded.vector, dimension);
       queryVector = embedded.vector;
     } catch (error) {
-      if (error instanceof EmbeddingError) {
-        throw new VectorSearchError('VECTOR_SEARCH_EMBEDDING_ERROR', error.message, 500);
-      }
       if (error instanceof VectorSearchError) {
         throw error;
+      }
+      if (error instanceof EmbeddingError) {
+        throw new VectorSearchError('VECTOR_SEARCH_EMBEDDING_ERROR', error.message, 500);
       }
       throw new VectorSearchError('VECTOR_SEARCH_EMBEDDING_ERROR', 'query embedding failed', 500);
     }

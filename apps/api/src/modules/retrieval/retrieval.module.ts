@@ -1,9 +1,15 @@
 import { Module } from '@nestjs/common';
+import type { EmbeddingProviderPort } from '@akb/ai';
+import { loadEmbeddingConfig, MockEmbeddingProvider } from '@akb/ai';
 import { AppConfigModule } from '../../common/config/app-config.module';
 import { AuthorizationService } from '../shared/application/authorization.service';
 import { WorkspacesModule } from '../workspaces/workspaces.module';
 import { VectorSearchApplicationService } from './application/vector-search.application.service';
-import { VECTOR_SEARCH_REPOSITORY } from './domain/vector-search.port';
+import {
+  EMBEDDING_PROVIDER,
+  VECTOR_SEARCH_REPOSITORY,
+  type VectorSearchRepositoryPort,
+} from './domain/vector-search.port';
 import { VectorSearchController } from './presentation/vector-search.controller';
 import { PgVectorSearchRepository } from '../../infrastructure/retrieval/pgvector-search.repository';
 
@@ -13,10 +19,25 @@ import { PgVectorSearchRepository } from '../../infrastructure/retrieval/pgvecto
   providers: [
     { provide: VECTOR_SEARCH_REPOSITORY, useClass: PgVectorSearchRepository },
     {
+      provide: EMBEDDING_PROVIDER,
+      useFactory: (): EmbeddingProviderPort => {
+        const config = loadEmbeddingConfig(process.env);
+        return new MockEmbeddingProvider(config);
+      },
+    },
+    {
       provide: VectorSearchApplicationService,
-      useFactory: (authorization: AuthorizationService, vectorSearch: PgVectorSearchRepository) =>
-        VectorSearchApplicationService.createDefault(authorization, vectorSearch),
-      inject: [AuthorizationService, VECTOR_SEARCH_REPOSITORY],
+      useFactory: (
+        authorization: AuthorizationService,
+        vectorSearch: VectorSearchRepositoryPort,
+        embeddingProvider: EmbeddingProviderPort,
+      ) =>
+        new VectorSearchApplicationService({
+          authorization,
+          vectorSearch,
+          embeddingProvider,
+        }),
+      inject: [AuthorizationService, VECTOR_SEARCH_REPOSITORY, EMBEDDING_PROVIDER],
     },
   ],
   exports: [VectorSearchApplicationService],
