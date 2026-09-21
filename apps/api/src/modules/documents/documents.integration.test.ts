@@ -181,7 +181,7 @@ describe('V0.4-F Document + MinIO integration', () => {
       .expect(201);
     uploadedDoc = uploadRes.body.id as string;
     uploadedKey = uploadRes.body.metadata?.storageKey as string;
-    expect(uploadRes.body.status).toBe('READY');
+    expect(uploadRes.body.status).toBe('PENDING');
     expect(uploadedKey).toContain('documents/');
 
     // MinIO real object exists
@@ -208,7 +208,7 @@ describe('V0.4-F Document + MinIO integration', () => {
         contentType: 'text/plain',
       })
       .expect(201);
-    expect(verRes.body.status).toBe('READY');
+    expect(verRes.body.status).toBe('PENDING');
     const dl2 = await request(server())
       .get(`/api/v1/documents/${uploadedDoc}/content`)
       .set('Authorization', `Bearer ${tokenA}`)

@@ -6,23 +6,32 @@ import { KnowledgeSpaceRepositoryAdapter } from '../../infrastructure/database/k
 import { WorkspaceRepositoryAdapter } from '../../infrastructure/database/workspace.repository.adapter';
 import { OBJECT_STORAGE } from '../../infrastructure/storage/object-storage.port';
 import { StorageModule } from '../../infrastructure/storage/storage.module';
+import { QueueModule } from '../../infrastructure/queue/queue.module';
+import { JOB_QUEUE } from '../../infrastructure/queue/job-queue.port';
+import type { JobQueuePort } from '../../infrastructure/queue/job-queue.port';
 import { KNOWLEDGE_SPACE_REPOSITORY } from '../knowledge-spaces/domain/knowledge-space-repository.port';
 import { AuthorizationService } from '../shared/application/authorization.service';
 import { WORKSPACE_REPOSITORY } from '../workspaces/domain/workspace-repository.port';
 import { WorkspacesModule } from '../workspaces/workspaces.module';
 import { DOCUMENT_REPOSITORY } from './domain/document-repository.port';
 import { DocumentApplicationService } from './application/documents.application.service';
+import { DocumentProcessingApplicationService } from './application/document-processing.application.service';
 import { DocumentsController, SpaceDocumentsController } from './presentation/documents.controller';
+import { DocumentProcessingController } from './presentation/document-processing.controller';
+import { PROCESSING_JOB_REPOSITORY } from './domain/processing-job.repository.port';
+import { ProcessingJobRepositoryAdapter } from '../../infrastructure/database/processing-job.repository.adapter';
 import type { ObjectStoragePort } from '../../infrastructure/storage/object-storage.port';
+import type { ProcessingJobRepositoryPort } from './domain/processing-job.repository.port';
 
 @Module({
-  imports: [AppConfigModule, StorageModule, WorkspacesModule],
-  controllers: [SpaceDocumentsController, DocumentsController],
+  imports: [AppConfigModule, StorageModule, QueueModule, WorkspacesModule],
+  controllers: [SpaceDocumentsController, DocumentsController, DocumentProcessingController],
   providers: [
     DocumentPolicyProvider,
     { provide: DOCUMENT_REPOSITORY, useClass: DocumentRepositoryAdapter },
     { provide: KNOWLEDGE_SPACE_REPOSITORY, useClass: KnowledgeSpaceRepositoryAdapter },
     { provide: WORKSPACE_REPOSITORY, useClass: WorkspaceRepositoryAdapter },
+    { provide: PROCESSING_JOB_REPOSITORY, useClass: ProcessingJobRepositoryAdapter },
     {
       provide: AuthorizationService,
       useFactory: (
@@ -42,7 +51,16 @@ import type { ObjectStoragePort } from '../../infrastructure/storage/object-stor
       ) => new DocumentApplicationService(documents, authorization, storage, policy.get()),
       inject: [DOCUMENT_REPOSITORY, AuthorizationService, OBJECT_STORAGE, DocumentPolicyProvider],
     },
+    {
+      provide: DocumentProcessingApplicationService,
+      useFactory: (
+        authorization: AuthorizationService,
+        queue: JobQueuePort,
+        jobs: ProcessingJobRepositoryPort,
+      ) => new DocumentProcessingApplicationService(authorization, queue, jobs),
+      inject: [AuthorizationService, JOB_QUEUE, PROCESSING_JOB_REPOSITORY],
+    },
   ],
-  exports: [DocumentApplicationService, AuthorizationService],
+  exports: [DocumentApplicationService, AuthorizationService, DocumentProcessingApplicationService],
 })
 export class DocumentsModule {}

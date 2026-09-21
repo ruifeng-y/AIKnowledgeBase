@@ -2,7 +2,7 @@
   "name": "@akb/worker",
   "version": "0.0.0",
   "private": true,
-  "description": "NestJS worker skeleton for AI Knowledge Base",
+  "description": "NestJS document processing worker",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -14,13 +14,19 @@
   "dependencies": {
     "@akb/config": "workspace:*",
     "@akb/contracts": "workspace:*",
+    "@akb/db": "workspace:*",
     "@nestjs/common": "^11.0.7",
     "@nestjs/core": "^11.0.7",
+    "bullmq": "^5.81.5",
+    "mammoth": "^1.12.3",
+    "minio": "^8.0.7",
+    "pdf-parse": "^1.1.4",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@nestjs/testing": "^11.0.7",
+    "@types/pdf-parse": "^1.1.4",
     "eslint": "^9.18.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",

@@ -189,7 +189,10 @@ describe('DocumentApplicationService', () => {
         },
         { title: 'Note' },
       ),
-    ).resolves.toMatchObject({ status: 'READY', title: 'Note' });
+    ).resolves.toMatchObject({
+      document: { status: 'PENDING', title: 'Note' },
+      version: { version: 1 },
+    });
 
     const doc = [...repo.docs.values()][0]!;
     const downloaded = await svc.download('user-a', doc.id);
@@ -310,9 +313,9 @@ describe('DocumentApplicationService', () => {
       },
       {},
     );
-    const key = String(uploaded.metadata['storageKey']);
+    const key = String(uploaded.document.metadata['storageKey']);
     await storage.delete(key);
-    await expect(svc.download('user-a', uploaded.id)).rejects.toMatchObject({
+    await expect(svc.download('user-a', uploaded.document.id)).rejects.toMatchObject({
       code: 'DOCUMENT_CONTENT_NOT_FOUND',
       httpStatus: 404,
     });

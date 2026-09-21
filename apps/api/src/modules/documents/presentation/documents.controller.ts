@@ -1,6 +1,6 @@
 import {
-  Body,
   Controller,
+  Body,
   Delete,
   Get,
   Param,
@@ -20,6 +20,7 @@ import {
   DocumentApplicationService,
   type UploadFileInput,
 } from '../application/documents.application.service';
+import { DocumentProcessingApplicationService } from '../application/document-processing.application.service';
 import { CreateDocumentDto, UpdateDocumentDto } from './documents.dto';
 
 type MulterFile = UploadFileInput;
@@ -28,7 +29,10 @@ type MulterFile = UploadFileInput;
 @ApiTags('documents')
 @ApiBearerAuth('bearer')
 export class SpaceDocumentsController {
-  constructor(private readonly documents: DocumentApplicationService) {}
+  constructor(
+    private readonly documents: DocumentApplicationService,
+    private readonly processing: DocumentProcessingApplicationService,
+  ) {}
 
   @Post('spaces/:spaceId/documents')
   @ApiOperation({ summary: 'Create document metadata in a knowledge space' })
@@ -60,25 +64,39 @@ export class SpaceDocumentsController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  upload(
+  async upload(
     @CurrentUser() user: AuthenticatedUser,
     @Param('spaceId') spaceId: string,
     @UploadedFile() file: MulterFile | undefined,
     @Body() body: { title?: string },
   ) {
-    return this.documents.upload(user.id, spaceId, file as MulterFile, { title: body?.title });
+    const result = await this.documents.upload(user.id, spaceId, file as MulterFile, {
+      title: body?.title,
+    });
+    await this.processing.afterUploadCreated({
+      knowledgeSpaceId: result.knowledgeSpaceId,
+      document: result.document,
+      version: result.version,
+    });
+    return result.document;
   }
 
   @Post('spaces/:spaceId/documents/:documentId/versions')
   @ApiOperation({ summary: 'Upload a new version for an existing document' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
-  uploadVersion(
+  async uploadVersion(
     @CurrentUser() user: AuthenticatedUser,
     @Param('documentId') documentId: string,
     @UploadedFile() file: MulterFile | undefined,
   ) {
-    return this.documents.appendVersion(user.id, documentId, file as MulterFile);
+    const result = await this.documents.appendVersion(user.id, documentId, file as MulterFile);
+    await this.processing.afterUploadCreated({
+      knowledgeSpaceId: result.knowledgeSpaceId,
+      document: result.document,
+      version: result.version,
+    });
+    return result.document;
   }
 }
 

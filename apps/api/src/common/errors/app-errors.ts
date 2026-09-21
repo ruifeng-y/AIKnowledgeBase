@@ -25,6 +25,10 @@ export const ERROR_CODES = {
   DOCUMENT_STORAGE_ERROR: 'DOCUMENT_STORAGE_ERROR',
   DOCUMENT_VERSION_NOT_FOUND: 'DOCUMENT_VERSION_NOT_FOUND',
   DOCUMENT_CONTENT_NOT_FOUND: 'DOCUMENT_CONTENT_NOT_FOUND',
+  DOCUMENT_PARSER_NOT_FOUND: 'DOCUMENT_PARSER_NOT_FOUND',
+  DOCUMENT_PARSE_ERROR: 'DOCUMENT_PARSE_ERROR',
+  DOCUMENT_NO_EXTRACTABLE_TEXT: 'DOCUMENT_NO_EXTRACTABLE_TEXT',
+  DOCUMENT_PROCESSING_ERROR: 'DOCUMENT_PROCESSING_ERROR',
   RATE_LIMITED: 'RATE_LIMITED',
 } as const;
 
@@ -166,4 +170,8 @@ export function documentContentNotFound(): CodedAppError {
     404,
     'Document does not have stored content',
   );
+}
+
+export function documentProcessingError(message = 'Document processing failed'): CodedAppError {
+  return new CodedAppError(ERROR_CODES.DOCUMENT_PROCESSING_ERROR, 500, message);
 }

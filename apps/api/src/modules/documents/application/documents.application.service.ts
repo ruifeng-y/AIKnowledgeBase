@@ -31,6 +31,18 @@ export interface DocumentDownload {
   buffer: Buffer;
 }
 
+export interface UploadResult {
+  document: DocumentRecord;
+  version: DocumentVersionRecord | null;
+  knowledgeSpaceId: string;
+}
+
+export interface UploadResult {
+  document: DocumentRecord;
+  version: DocumentVersionRecord | null;
+  knowledgeSpaceId: string;
+}
+
 export function sanitizeFilename(raw: string): string {
   const normalized = (raw || 'file').replace(/\\/g, '/');
   const segments = normalized.split('/');
@@ -152,7 +164,7 @@ export class DocumentApplicationService {
     spaceId: string,
     file: UploadFileInput | undefined,
     options: { title?: string },
-  ): Promise<DocumentRecord> {
+  ): Promise<UploadResult> {
     const space = await this.authorization.assertSpaceOwner(userId, spaceId);
     const workspace = await this.authorization.assertWorkspaceOwner(userId, space.workspaceId);
     const validated = this.validateUploadFile(file);
@@ -194,8 +206,8 @@ export class DocumentApplicationService {
         mimeType: validated.mimeType,
       };
       const version = await this.documents.createVersion(document.id, versionInput);
-      return await this.documents.updateOwned(document.id, userId, {
-        status: 'READY',
+      const pending = await this.documents.updateOwned(document.id, userId, {
+        status: 'PENDING',
         mimeType: validated.mimeType,
         currentVersionId: version.id,
         metadata: mergeMetadata(document.metadata, {
@@ -205,6 +217,7 @@ export class DocumentApplicationService {
           fileSize: fileBuffer.length,
         }),
       });
+      return { document: pending, version, knowledgeSpaceId: space.id };
     } catch {
       await this.storage.delete(storageKey).catch(() => undefined);
       await this.documents.deleteOwned(document.id, userId).catch(() => undefined);
@@ -216,7 +229,7 @@ export class DocumentApplicationService {
     userId: string,
     documentId: string,
     file: UploadFileInput,
-  ): Promise<DocumentRecord> {
+  ): Promise<UploadResult> {
     const document = await this.authorization.assertDocumentOwner(userId, documentId);
     const space = await this.authorization.assertSpaceOwner(userId, document.knowledgeSpaceId);
     const workspace = await this.authorization.assertWorkspaceOwner(userId, space.workspaceId);
@@ -245,8 +258,8 @@ export class DocumentApplicationService {
         fileSize: file.buffer.length,
         mimeType: validated.mimeType,
       });
-      return await this.documents.updateOwned(document.id, userId, {
-        status: 'READY',
+      const pending = await this.documents.updateOwned(document.id, userId, {
+        status: 'PENDING',
         mimeType: validated.mimeType,
         currentVersionId: version.id,
         metadata: mergeMetadata(document.metadata, {
@@ -256,6 +269,7 @@ export class DocumentApplicationService {
           fileSize: file.buffer.length,
         }),
       });
+      return { document: pending, version, knowledgeSpaceId: space.id };
     } catch {
       await this.storage.delete(storageKey).catch(() => undefined);
       throw documentStorageError();

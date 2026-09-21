@@ -90,6 +90,7 @@ function mimeList(env: NodeJS.ProcessEnv): string[] {
     'application/pdf',
     'application/json',
     'text/html',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   ];
   if (!raw) {
     return fallback;

@@ -14,6 +14,7 @@ const DEFAULT_ALLOWED = [
   'application/pdf',
   'application/json',
   'text/html',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ];
 
 export function loadDocumentPolicy(config: AppConfig): DocumentPolicy {
