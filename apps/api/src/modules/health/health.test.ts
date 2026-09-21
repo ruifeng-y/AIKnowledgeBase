@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { AppModule } from '../../app.module';
+import { AllExceptionsFilter } from '../../common/errors/all-exceptions.filter';
 import { RequestIdInterceptor } from '../../common/interceptors/request-id.interceptor';
 
 describe('GET /health', () => {
@@ -15,6 +16,7 @@ describe('GET /health', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
+    app.setGlobalPrefix('api/v1', { exclude: ['health'] });
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
@@ -23,14 +25,17 @@ describe('GET /health', () => {
       }),
     );
     app.useGlobalInterceptors(new RequestIdInterceptor());
+    app.useGlobalFilters(new AllExceptionsFilter());
     await app.init();
   });
 
   afterAll(async () => {
-    await app.close();
+    if (app) {
+      await app.close();
+    }
   });
 
-  it('returns 200 and status ok', async () => {
+  it('returns 200 and status ok at /health', async () => {
     const response = await request(app.getHttpServer()).get('/health');
 
     expect(response.status).toBe(200);

@@ -14,12 +14,17 @@
   "dependencies": {
     "@akb/config": "workspace:*",
     "@akb/contracts": "workspace:*",
+    "@akb/db": "workspace:*",
     "@akb/utils": "workspace:*",
     "@nestjs/common": "^11.0.7",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.7",
     "@nestjs/platform-express": "^11.0.7",
+    "@nestjs/swagger": "^11.2.0",
+    "bullmq": "^5.34.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "minio": "^8.0.4",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

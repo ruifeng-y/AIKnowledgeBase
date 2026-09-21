@@ -258,4 +258,7 @@ GET http://localhost:3001/health
 
 响应头会回传或生成 `X-Request-ID`。
 
-未来业务 API 将使用 `/api/v1/*`，但 `/health` 保持根路径。
+业务 API 统一前缀：`/api/v1`（`/health` 除外）。  
+Swagger：`http://localhost:3001/api/docs`（V0.4-D 架构基线，暂无业务接口）。
+
+后端分层：`Presentation → Application → Domain Ports → Infrastructure (@akb/db / MinIO / BullMQ / Mock AI)`。
