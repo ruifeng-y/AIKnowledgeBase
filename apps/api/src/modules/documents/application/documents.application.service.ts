@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import type { DocumentPolicy } from '../../../common/config/document-policy';
 import {
+  documentContentNotFound,
   documentFileRequired,
   documentFileTooLarge,
   documentStorageError,
@@ -264,17 +265,26 @@ export class DocumentApplicationService {
   async download(userId: string, documentId: string): Promise<DocumentDownload> {
     const bundle = await this.documents.findOwnedDocumentWithVersions(documentId, userId);
     if (!bundle) {
-      // Cross-tenant or missing document must surface as 404, not storage error.
+      // Cross-tenant / missing document → 404 DOCUMENT_NOT_FOUND
       await this.authorization.assertDocumentOwner(userId, documentId);
-      throw documentStorageError();
+      throw documentContentNotFound();
     }
     const { document, versions } = bundle;
     const current =
       versions.find((item) => item.id === document.currentVersionId) ??
       [...versions].sort((a, b) => b.version - a.version)[0];
     if (!current) {
-      throw documentStorageError();
+      // Metadata-only document without version / object key.
+      throw documentContentNotFound();
     }
+
+    const exists = await this.storage.exists(current.storageKey).catch(() => {
+      throw documentStorageError();
+    });
+    if (!exists) {
+      throw documentContentNotFound();
+    }
+
     try {
       const buffer = await this.storage.get(current.storageKey);
       return { document, version: current, buffer };

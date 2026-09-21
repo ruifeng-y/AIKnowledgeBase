@@ -213,4 +213,108 @@ describe('DocumentApplicationService', () => {
     await svc.deleteOwned('user-a', doc.id);
     expect(repo.docs.has(doc.id)).toBe(false);
   });
+
+  it('returns 404 DOCUMENT_CONTENT_NOT_FOUND for metadata-only document', async () => {
+    const storage = new InMemoryObjectStorage();
+    const repo = memRepo();
+    const auth = new AuthorizationService(
+      {
+        findOwnedById: async (id, owner) =>
+          owner === 'user-a' && id === 'ws-a'
+            ? {
+                id: 'ws-a',
+                name: 'A',
+                slug: 'ws-a',
+                description: null,
+                ownerId: 'user-a',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              }
+            : null,
+      },
+      {
+        findOwnedById: async (id, owner) =>
+          owner === 'user-a' && id === 'space-a'
+            ? {
+                id: 'space-a',
+                workspaceId: 'ws-a',
+                name: 'Space A',
+                slug: 'space-a',
+                description: null,
+                settings: {},
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              }
+            : null,
+      },
+      {
+        findOwnedById: async (id, owner) =>
+          owner === 'user-a' ? (repo.docs.get(id) ?? null) : null,
+      },
+    );
+    const svc = new DocumentApplicationService(repo, auth, storage, policy);
+    const metaOnly = await svc.createMetadataOnly('user-a', 'space-a', { title: 'Meta only' });
+    await expect(svc.download('user-a', metaOnly.id)).rejects.toMatchObject({
+      code: 'DOCUMENT_CONTENT_NOT_FOUND',
+      httpStatus: 404,
+    });
+  });
+
+  it('returns 404 DOCUMENT_CONTENT_NOT_FOUND when object missing from storage', async () => {
+    const storage = new InMemoryObjectStorage();
+    const repo = memRepo();
+    const auth = new AuthorizationService(
+      {
+        findOwnedById: async (id, owner) =>
+          owner === 'user-a' && id === 'ws-a'
+            ? {
+                id: 'ws-a',
+                name: 'A',
+                slug: 'ws-a',
+                description: null,
+                ownerId: 'user-a',
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              }
+            : null,
+      },
+      {
+        findOwnedById: async (id, owner) =>
+          owner === 'user-a' && id === 'space-a'
+            ? {
+                id: 'space-a',
+                workspaceId: 'ws-a',
+                name: 'Space A',
+                slug: 'space-a',
+                description: null,
+                settings: {},
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              }
+            : null,
+      },
+      {
+        findOwnedById: async (id, owner) =>
+          owner === 'user-a' ? (repo.docs.get(id) ?? null) : null,
+      },
+    );
+    const svc = new DocumentApplicationService(repo, auth, storage, policy);
+    const uploaded = await svc.upload(
+      'user-a',
+      'space-a',
+      {
+        originalname: 'gone.txt',
+        mimetype: 'text/plain',
+        size: 4,
+        buffer: Buffer.from('gone'),
+      },
+      {},
+    );
+    const key = String(uploaded.metadata['storageKey']);
+    await storage.delete(key);
+    await expect(svc.download('user-a', uploaded.id)).rejects.toMatchObject({
+      code: 'DOCUMENT_CONTENT_NOT_FOUND',
+      httpStatus: 404,
+    });
+  });
 });

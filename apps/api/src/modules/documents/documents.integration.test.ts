@@ -135,6 +135,14 @@ describe('V0.4-F Document + MinIO integration', () => {
         .send({ title: 'Architecture notes' })
         .expect(201)
     ).body.id as string;
+
+    // metadata-only document has no stored content
+    const metaOnly = await request(server())
+      .get(`/api/v1/documents/${docA}/content`)
+      .set('Authorization', `Bearer ${tokenA}`)
+      .expect(404);
+    expect(metaOnly.body.error.code).toBe('DOCUMENT_CONTENT_NOT_FOUND');
+
     docB = (
       await request(server())
         .post(`/api/v1/workspaces/${wsB}/spaces/${spaceB}/documents`)
@@ -206,6 +214,24 @@ describe('V0.4-F Document + MinIO integration', () => {
       .set('Authorization', `Bearer ${tokenA}`)
       .expect(200);
     expect(dl2.text).toBe(v2);
+
+    // object missing from storage → 404 DOCUMENT_CONTENT_NOT_FOUND
+    const orphanUpload = await request(server())
+      .post(`/api/v1/spaces/${spaceA}/documents/upload`)
+      .set('Authorization', `Bearer ${tokenA}`)
+      .field('title', 'Orphan object')
+      .attach('file', Buffer.from('orphan-content', 'utf8'), {
+        filename: 'orphan.txt',
+        contentType: 'text/plain',
+      })
+      .expect(201);
+    const orphanKey = String(orphanUpload.body.metadata?.storageKey ?? '');
+    await storage.delete(orphanKey);
+    const missingObj = await request(server())
+      .get(`/api/v1/documents/${orphanUpload.body.id}/content`)
+      .set('Authorization', `Bearer ${tokenA}`)
+      .expect(404);
+    expect(missingObj.body.error.code).toBe('DOCUMENT_CONTENT_NOT_FOUND');
 
     // missing file
     await request(server())

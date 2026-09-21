@@ -24,6 +24,7 @@ export const ERROR_CODES = {
   DOCUMENT_UPLOAD_FAILED: 'DOCUMENT_UPLOAD_FAILED',
   DOCUMENT_STORAGE_ERROR: 'DOCUMENT_STORAGE_ERROR',
   DOCUMENT_VERSION_NOT_FOUND: 'DOCUMENT_VERSION_NOT_FOUND',
+  DOCUMENT_CONTENT_NOT_FOUND: 'DOCUMENT_CONTENT_NOT_FOUND',
   RATE_LIMITED: 'RATE_LIMITED',
 } as const;
 
@@ -156,5 +157,13 @@ export function documentVersionNotFound(): CodedAppError {
     ERROR_CODES.DOCUMENT_VERSION_NOT_FOUND,
     404,
     'Document version not found',
+  );
+}
+
+export function documentContentNotFound(): CodedAppError {
+  return new CodedAppError(
+    ERROR_CODES.DOCUMENT_CONTENT_NOT_FOUND,
+    404,
+    'Document does not have stored content',
   );
 }
