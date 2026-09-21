@@ -11,6 +11,8 @@ import type { TokenServicePort } from './modules/auth/domain/auth-ports';
 import { DocumentsModule } from './modules/documents/documents.module';
 import { HealthModule } from './modules/health/health.module';
 import { KnowledgeSpacesModule } from './modules/knowledge-spaces/knowledge-spaces.module';
+import { RETRIEVAL_SERVICE } from './modules/retrieval/domain/retrieval-service.port';
+import { RetrievalModule } from './modules/retrieval/retrieval.module';
 import { USER_ACCOUNT_REPOSITORY } from './modules/users/domain/user-account.port';
 import type { UserAccountRepositoryPort } from './modules/users/domain/user-account.port';
 import { UsersModule } from './modules/users/users.module';
@@ -30,6 +32,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
     WorkspacesModule,
     KnowledgeSpacesModule,
     DocumentsModule,
+    RetrievalModule,
     HealthModule,
   ],
   providers: [
@@ -46,6 +49,12 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
     { provide: APP_GUARD, useExisting: JwtAuthGuard },
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_INTERCEPTOR, useClass: RequestIdInterceptor },
+    {
+      provide: RETRIEVAL_SERVICE,
+      useValue: {
+        search: async () => [],
+      },
+    },
   ],
 })
 export class AppModule {}

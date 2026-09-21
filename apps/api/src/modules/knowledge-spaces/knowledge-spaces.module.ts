@@ -36,6 +36,6 @@ import {
       inject: [KNOWLEDGE_SPACE_REPOSITORY, AuthorizationService],
     },
   ],
-  exports: [KnowledgeSpaceApplicationService],
+  exports: [KnowledgeSpaceApplicationService, AuthorizationService],
 })
 export class KnowledgeSpacesModule {}

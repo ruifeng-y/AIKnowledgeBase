@@ -2,6 +2,7 @@ import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 import { Catch, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import { AppError, ERROR_CODES } from './app-errors';
+import { VectorSearchError } from '../../modules/retrieval/domain/vector-search.port';
 
 interface ErrorResponseBody {
   error: {
@@ -38,6 +39,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let message = 'Internal server error';
 
     if (exception instanceof AppError) {
+      status = exception.httpStatus;
+      code = exception.code;
+      message = exception.message;
+    } else if (exception instanceof VectorSearchError) {
       status = exception.httpStatus;
       code = exception.code;
       message = exception.message;

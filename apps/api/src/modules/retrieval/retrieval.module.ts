@@ -1,16 +1,24 @@
 import { Module } from '@nestjs/common';
-import { RETRIEVAL_SERVICE } from './domain/retrieval-service.port';
+import { AppConfigModule } from '../../common/config/app-config.module';
+import { AuthorizationService } from '../shared/application/authorization.service';
+import { WorkspacesModule } from '../workspaces/workspaces.module';
+import { VectorSearchApplicationService } from './application/vector-search.application.service';
+import { VECTOR_SEARCH_REPOSITORY } from './domain/vector-search.port';
+import { VectorSearchController } from './presentation/vector-search.controller';
+import { PgVectorSearchRepository } from '../../infrastructure/retrieval/pgvector-search.repository';
 
-/** V0.4-D: architecture boundary only. Hybrid retrieval arrives in later phases. */
 @Module({
+  imports: [AppConfigModule, WorkspacesModule],
+  controllers: [VectorSearchController],
   providers: [
+    { provide: VECTOR_SEARCH_REPOSITORY, useClass: PgVectorSearchRepository },
     {
-      provide: RETRIEVAL_SERVICE,
-      useValue: {
-        search: async () => [],
-      },
+      provide: VectorSearchApplicationService,
+      useFactory: (authorization: AuthorizationService, vectorSearch: PgVectorSearchRepository) =>
+        VectorSearchApplicationService.createDefault(authorization, vectorSearch),
+      inject: [AuthorizationService, VECTOR_SEARCH_REPOSITORY],
     },
   ],
-  exports: [RETRIEVAL_SERVICE],
+  exports: [VectorSearchApplicationService],
 })
 export class RetrievalModule {}
