@@ -1,5 +1,3 @@
-/** Domain ports must not import NestJS, Prisma, or infrastructure SDKs. */
-
 export interface WorkspaceRecord {
   id: string;
   name: string;
@@ -10,10 +8,27 @@ export interface WorkspaceRecord {
   updatedAt: Date;
 }
 
+export interface CreateWorkspaceInput {
+  name: string;
+  slug: string;
+}
+
+export interface UpdateWorkspaceInput {
+  name?: string;
+  slug?: string;
+}
+
 export const WORKSPACE_REPOSITORY = Symbol('WORKSPACE_REPOSITORY');
 
 export interface WorkspaceRepositoryPort {
-  findById(id: string): Promise<WorkspaceRecord | null>;
+  create(ownerId: string, input: CreateWorkspaceInput): Promise<WorkspaceRecord>;
+  findByOwnerId(ownerId: string): Promise<WorkspaceRecord[]>;
+  findOwnedById(workspaceId: string, ownerId: string): Promise<WorkspaceRecord | null>;
   findBySlug(slug: string): Promise<WorkspaceRecord | null>;
-  listByOwnerId(ownerId: string): Promise<WorkspaceRecord[]>;
+  updateOwned(
+    workspaceId: string,
+    ownerId: string,
+    input: UpdateWorkspaceInput,
+  ): Promise<WorkspaceRecord>;
+  deleteOwned(workspaceId: string, ownerId: string): Promise<void>;
 }

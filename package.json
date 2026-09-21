@@ -8,11 +8,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
-    "test": "turbo test",
+    "dev": "pnpm --filter \"@akb/api\" --filter \"@akb/web\" --filter \"@akb/worker\" -r --parallel dev",
+    "build": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" build",
+    "lint": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" lint",
+    "typecheck": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" typecheck",
+    "test": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" test",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

@@ -7,6 +7,7 @@ export interface AppConfig {
     nodeEnv: NodeEnv;
     port: number;
     apiPrefix: string;
+    corsOrigins: string[];
   };
   database: {
     url: string;
@@ -25,7 +26,8 @@ export interface AppConfig {
   };
   auth: {
     jwtSecret: string;
-    accessTokenTtlSeconds: number;
+    accessTokenTtl: string;
+    refreshTokenTtl: string;
   };
   ai: {
     llmProvider: string;
@@ -68,6 +70,14 @@ function logLevel(env: NodeJS.ProcessEnv): 'debug' | 'info' | 'warn' | 'error' {
   return raw === 'debug' || raw === 'warn' || raw === 'error' ? raw : 'info';
 }
 
+function corsOrigins(env: NodeJS.ProcessEnv): string[] {
+  const raw = str(env, 'CORS_ORIGINS', 'http://localhost:3000');
+  return raw
+    .split(',')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0 && item !== '*');
+}
+
 /** Single place that reads process.env. Business code must inject APP_CONFIG. */
 export function loadAppConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   return {
@@ -75,6 +85,7 @@ export function loadAppConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       nodeEnv: nodeEnv(env),
       port: int(env, 'API_PORT', 3001),
       apiPrefix: 'api/v1',
+      corsOrigins: corsOrigins(env),
     },
     database: {
       url: str(env, 'DATABASE_URL', 'postgresql://akb:change_me@localhost:5432/ai_knowledge_base'),
@@ -93,7 +104,8 @@ export function loadAppConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     },
     auth: {
       jwtSecret: str(env, 'JWT_SECRET', 'dev-only-change-me'),
-      accessTokenTtlSeconds: int(env, 'JWT_ACCESS_TTL_SECONDS', 3600),
+      accessTokenTtl: str(env, 'JWT_ACCESS_TTL', '15m'),
+      refreshTokenTtl: str(env, 'JWT_REFRESH_TTL', '7d'),
     },
     ai: {
       llmProvider: str(env, 'LLM_PROVIDER', 'mock'),

@@ -1,5 +1,3 @@
-/** Domain ports must not import NestJS, Prisma, or infrastructure SDKs. */
-
 export interface KnowledgeSpaceRecord {
   id: string;
   workspaceId: string;
@@ -11,10 +9,30 @@ export interface KnowledgeSpaceRecord {
   updatedAt: Date;
 }
 
+export interface CreateKnowledgeSpaceInput {
+  name: string;
+  slug: string;
+  description?: string | null;
+}
+
+export interface UpdateKnowledgeSpaceInput {
+  name?: string;
+  slug?: string;
+  description?: string | null;
+  settings?: Record<string, unknown>;
+}
+
 export const KNOWLEDGE_SPACE_REPOSITORY = Symbol('KNOWLEDGE_SPACE_REPOSITORY');
 
 export interface KnowledgeSpaceRepositoryPort {
-  findById(id: string): Promise<KnowledgeSpaceRecord | null>;
+  create(workspaceId: string, input: CreateKnowledgeSpaceInput): Promise<KnowledgeSpaceRecord>;
+  findByWorkspaceId(workspaceId: string): Promise<KnowledgeSpaceRecord[]>;
+  findOwnedById(spaceId: string, ownerId: string): Promise<KnowledgeSpaceRecord | null>;
   findByWorkspaceIdAndSlug(workspaceId: string, slug: string): Promise<KnowledgeSpaceRecord | null>;
-  listByWorkspaceId(workspaceId: string): Promise<KnowledgeSpaceRecord[]>;
+  updateOwned(
+    spaceId: string,
+    ownerId: string,
+    input: UpdateKnowledgeSpaceInput,
+  ): Promise<KnowledgeSpaceRecord>;
+  deleteOwned(spaceId: string, ownerId: string): Promise<void>;
 }

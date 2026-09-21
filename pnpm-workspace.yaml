@@ -8,8 +8,5 @@ onlyBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'
   - prisma
-  - '@prisma/engines-version'
-  - prisma-engines
-  - bufferutil
-  - utf-8-validate
+  - argon2
   - '@nestjs/core'
