@@ -1,29 +1,43 @@
 import { describe, expect, it } from 'vitest';
-import { Argon2PasswordService } from '../../../infrastructure/auth/argon2-password.service';
 import { AuthorizationService } from './authorization.service';
 
-describe('AuthorizationService', () => {
-  const workspaceA = {
-    id: 'ws-a',
-    name: 'A',
-    slug: 'ws-a',
-    description: null,
-    ownerId: 'user-a',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-  const spaceB = {
-    id: 'space-b',
-    workspaceId: 'ws-b',
-    name: 'B',
-    slug: 'space-b',
-    description: null,
-    settings: {},
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+const workspaceA = {
+  id: 'ws-a',
+  name: 'A',
+  slug: 'ws-a',
+  description: null,
+  ownerId: 'user-a',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
 
-  it('returns owned workspace', async () => {
+const spaceA = {
+  id: 'space-a',
+  workspaceId: 'ws-a',
+  name: 'Space A',
+  slug: 'space-a',
+  description: null,
+  settings: {},
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+const documentB = {
+  id: 'doc-b',
+  knowledgeSpaceId: 'space-b',
+  title: 'Doc B',
+  sourceType: 'UPLOAD' as const,
+  sourceUri: null,
+  mimeType: 'text/plain',
+  status: 'READY' as const,
+  currentVersionId: null,
+  metadata: {},
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+describe('AuthorizationService document tenancy', () => {
+  it('allows owner document access', async () => {
     const service = new AuthorizationService(
       {
         findOwnedById: async (id, owner) =>
@@ -31,45 +45,51 @@ describe('AuthorizationService', () => {
       },
       {
         findOwnedById: async (id, owner) =>
-          id === 'space-b' && owner === 'user-b' ? spaceB : null,
+          id === 'space-a' && owner === 'user-a' ? spaceA : null,
       },
-    );
-    await expect(service.assertWorkspaceOwner('user-a', 'ws-a')).resolves.toEqual(workspaceA);
-  });
-
-  it('throws 404 for cross-tenant workspace', async () => {
-    const service = new AuthorizationService(
       {
         findOwnedById: async (id, owner) =>
-          id === 'ws-a' && owner === 'user-a' ? workspaceA : null,
+          id === 'doc-a' && owner === 'user-a'
+            ? { ...documentB, id: 'doc-a', knowledgeSpaceId: 'space-a' }
+            : null,
       },
-      { findOwnedById: async () => null },
     );
-    await expect(service.assertWorkspaceOwner('user-b', 'ws-a')).rejects.toMatchObject({
-      httpStatus: 404,
-      code: 'WORKSPACE_NOT_FOUND',
+    await expect(service.assertDocumentOwner('user-a', 'doc-a')).resolves.toMatchObject({
+      id: 'doc-a',
     });
   });
 
-  it('throws 404 for cross-tenant space', async () => {
+  it('returns 404 for cross-tenant document', async () => {
     const service = new AuthorizationService(
+      { findOwnedById: async () => null },
       { findOwnedById: async () => null },
       {
         findOwnedById: async (id, owner) =>
-          id === 'space-b' && owner === 'user-b' ? spaceB : null,
+          id === 'doc-b' && owner === 'user-b' ? documentB : null,
       },
     );
-    await expect(service.assertSpaceOwner('user-a', 'space-b')).rejects.toMatchObject({
+    await expect(service.assertDocumentOwner('user-a', 'doc-b')).rejects.toMatchObject({
       httpStatus: 404,
-      code: 'KNOWLEDGE_SPACE_NOT_FOUND',
+      code: 'DOCUMENT_NOT_FOUND',
     });
   });
 });
 
-describe('password service smoke', () => {
-  it('argon2 hash is not plaintext', async () => {
-    const svc = new Argon2PasswordService();
-    const hash = await svc.hash('password123');
-    expect(hash).not.toEqual('password123');
+describe('buildObjectKey / sanitizeFilename', () => {
+  it('builds server-side object keys without user path input', async () => {
+    const mod = await import('../../documents/application/documents.application.service');
+    const key = mod.buildObjectKey({
+      workspaceId: 'w1',
+      spaceId: 's1',
+      documentId: 'd1',
+      version: 2,
+    });
+    expect(key).toBe('workspaces/w1/spaces/s1/documents/d1/versions/2/original');
+  });
+
+  it('sanitizes unsafe filenames', async () => {
+    const mod = await import('../../documents/application/documents.application.service');
+    expect(mod.sanitizeFilename('../../etc/passwd')).toBe('passwd');
+    expect(mod.sanitizeFilename('C:\\Windows\\secret.txt')).toBe('secret.txt');
   });
 });

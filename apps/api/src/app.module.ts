@@ -8,6 +8,7 @@ import { RequestIdInterceptor } from './common/interceptors/request-id.intercept
 import { AuthModule } from './modules/auth/auth.module';
 import { TOKEN_SERVICE } from './modules/auth/domain/auth-ports';
 import type { TokenServicePort } from './modules/auth/domain/auth-ports';
+import { DocumentsModule } from './modules/documents/documents.module';
 import { HealthModule } from './modules/health/health.module';
 import { KnowledgeSpacesModule } from './modules/knowledge-spaces/knowledge-spaces.module';
 import { USER_ACCOUNT_REPOSITORY } from './modules/users/domain/user-account.port';
@@ -28,6 +29,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
     UsersModule,
     WorkspacesModule,
     KnowledgeSpacesModule,
+    DocumentsModule,
     HealthModule,
   ],
   providers: [

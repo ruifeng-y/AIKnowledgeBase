@@ -29,6 +29,10 @@ export interface AppConfig {
     accessTokenTtl: string;
     refreshTokenTtl: string;
   };
+  documents: {
+    maxFileSizeBytes: number;
+    allowedMimeTypes: string[];
+  };
   ai: {
     llmProvider: string;
     llmModel: string;
@@ -78,6 +82,24 @@ function corsOrigins(env: NodeJS.ProcessEnv): string[] {
     .filter((item) => item.length > 0 && item !== '*');
 }
 
+function mimeList(env: NodeJS.ProcessEnv): string[] {
+  const raw = env['DOCUMENT_ALLOWED_MIME_TYPES'];
+  const fallback = [
+    'text/plain',
+    'text/markdown',
+    'application/pdf',
+    'application/json',
+    'text/html',
+  ];
+  if (!raw) {
+    return fallback;
+  }
+  return raw
+    .split(',')
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean);
+}
+
 /** Single place that reads process.env. Business code must inject APP_CONFIG. */
 export function loadAppConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   return {
@@ -106,6 +128,10 @@ export function loadAppConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
       jwtSecret: str(env, 'JWT_SECRET', 'dev-only-change-me'),
       accessTokenTtl: str(env, 'JWT_ACCESS_TTL', '15m'),
       refreshTokenTtl: str(env, 'JWT_REFRESH_TTL', '7d'),
+    },
+    documents: {
+      maxFileSizeBytes: int(env, 'DOCUMENT_MAX_FILE_SIZE_BYTES', 20 * 1024 * 1024),
+      allowedMimeTypes: mimeList(env),
     },
     ai: {
       llmProvider: str(env, 'LLM_PROVIDER', 'mock'),

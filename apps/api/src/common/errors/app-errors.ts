@@ -17,6 +17,13 @@ export const ERROR_CODES = {
   KNOWLEDGE_SPACE_NOT_FOUND: 'KNOWLEDGE_SPACE_NOT_FOUND',
   KNOWLEDGE_SPACE_SLUG_ALREADY_EXISTS: 'KNOWLEDGE_SPACE_SLUG_ALREADY_EXISTS',
   KNOWLEDGE_SPACE_FORBIDDEN: 'KNOWLEDGE_SPACE_FORBIDDEN',
+  DOCUMENT_NOT_FOUND: 'DOCUMENT_NOT_FOUND',
+  DOCUMENT_FILE_REQUIRED: 'DOCUMENT_FILE_REQUIRED',
+  DOCUMENT_FILE_TOO_LARGE: 'DOCUMENT_FILE_TOO_LARGE',
+  DOCUMENT_UNSUPPORTED_FILE_TYPE: 'DOCUMENT_UNSUPPORTED_FILE_TYPE',
+  DOCUMENT_UPLOAD_FAILED: 'DOCUMENT_UPLOAD_FAILED',
+  DOCUMENT_STORAGE_ERROR: 'DOCUMENT_STORAGE_ERROR',
+  DOCUMENT_VERSION_NOT_FOUND: 'DOCUMENT_VERSION_NOT_FOUND',
   RATE_LIMITED: 'RATE_LIMITED',
 } as const;
 
@@ -113,5 +120,41 @@ export function knowledgeSpaceSlugExists(): CodedAppError {
     ERROR_CODES.KNOWLEDGE_SPACE_SLUG_ALREADY_EXISTS,
     409,
     'Knowledge space slug already exists',
+  );
+}
+
+export function documentNotFound(): CodedAppError {
+  return new CodedAppError(ERROR_CODES.DOCUMENT_NOT_FOUND, 404, 'Document not found');
+}
+
+export function documentFileRequired(): CodedAppError {
+  return new CodedAppError(ERROR_CODES.DOCUMENT_FILE_REQUIRED, 400, 'File is required');
+}
+
+export function documentFileTooLarge(): CodedAppError {
+  return new CodedAppError(ERROR_CODES.DOCUMENT_FILE_TOO_LARGE, 400, 'File is too large');
+}
+
+export function documentUnsupportedFileType(): CodedAppError {
+  return new CodedAppError(
+    ERROR_CODES.DOCUMENT_UNSUPPORTED_FILE_TYPE,
+    400,
+    'Unsupported file type',
+  );
+}
+
+export function documentUploadFailed(): CodedAppError {
+  return new CodedAppError(ERROR_CODES.DOCUMENT_UPLOAD_FAILED, 500, 'Document upload failed');
+}
+
+export function documentStorageError(): CodedAppError {
+  return new CodedAppError(ERROR_CODES.DOCUMENT_STORAGE_ERROR, 500, 'Document storage error');
+}
+
+export function documentVersionNotFound(): CodedAppError {
+  return new CodedAppError(
+    ERROR_CODES.DOCUMENT_VERSION_NOT_FOUND,
+    404,
+    'Document version not found',
   );
 }

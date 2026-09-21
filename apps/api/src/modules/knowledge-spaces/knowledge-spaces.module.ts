@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { DocumentRepositoryAdapter } from '../../infrastructure/database/document.repository.adapter';
 import { KnowledgeSpaceRepositoryAdapter } from '../../infrastructure/database/knowledge-space.repository.adapter';
 import { WorkspaceRepositoryAdapter } from '../../infrastructure/database/workspace.repository.adapter';
+import { DOCUMENT_REPOSITORY } from '../documents/domain/document-repository.port';
 import { AuthorizationService } from '../shared/application/authorization.service';
 import { WORKSPACE_REPOSITORY } from '../workspaces/domain/workspace-repository.port';
 import { WorkspacesModule } from '../workspaces/workspaces.module';
@@ -17,13 +19,15 @@ import {
   providers: [
     { provide: KNOWLEDGE_SPACE_REPOSITORY, useClass: KnowledgeSpaceRepositoryAdapter },
     { provide: WORKSPACE_REPOSITORY, useClass: WorkspaceRepositoryAdapter },
+    { provide: DOCUMENT_REPOSITORY, useClass: DocumentRepositoryAdapter },
     {
       provide: AuthorizationService,
       useFactory: (
         workspaces: WorkspaceRepositoryAdapter,
         spaces: KnowledgeSpaceRepositoryAdapter,
-      ) => new AuthorizationService(workspaces, spaces),
-      inject: [WORKSPACE_REPOSITORY, KNOWLEDGE_SPACE_REPOSITORY],
+        documents: DocumentRepositoryAdapter,
+      ) => new AuthorizationService(workspaces, spaces, documents),
+      inject: [WORKSPACE_REPOSITORY, KNOWLEDGE_SPACE_REPOSITORY, DOCUMENT_REPOSITORY],
     },
     {
       provide: KnowledgeSpaceApplicationService,

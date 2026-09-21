@@ -6,7 +6,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { AppModule } from '../../app.module';
 import { APP_CONFIG, type AppConfig } from '../../common/config/app-config';
 
-const suffix = Date.now().toString(36);
+const suffix = `${Date.now().toString(36)}${Math.floor(Math.random() * 10000)}`;
 
 function appConfig(): AppConfig {
   return {

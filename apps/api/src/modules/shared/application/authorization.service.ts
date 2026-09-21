@@ -1,6 +1,11 @@
+import type { DocumentRecord } from '../../documents/domain/document-repository.port';
 import type { KnowledgeSpaceRecord } from '../../knowledge-spaces/domain/knowledge-space-repository.port';
 import type { WorkspaceRecord } from '../../workspaces/domain/workspace-repository.port';
-import { knowledgeSpaceNotFound, workspaceNotFound } from '../../../common/errors/app-errors';
+import {
+  documentNotFound,
+  knowledgeSpaceNotFound,
+  workspaceNotFound,
+} from '../../../common/errors/app-errors';
 
 /**
  * Application-layer authorization boundary.
@@ -13,6 +18,9 @@ export class AuthorizationService {
     },
     private readonly spaces: {
       findOwnedById(spaceId: string, ownerId: string): Promise<KnowledgeSpaceRecord | null>;
+    },
+    private readonly documents: {
+      findOwnedById(documentId: string, ownerId: string): Promise<DocumentRecord | null>;
     },
   ) {}
 
@@ -30,5 +38,13 @@ export class AuthorizationService {
       throw knowledgeSpaceNotFound();
     }
     return space;
+  }
+
+  async assertDocumentOwner(userId: string, documentId: string): Promise<DocumentRecord> {
+    const document = await this.documents.findOwnedById(documentId, userId);
+    if (!document) {
+      throw documentNotFound();
+    }
+    return document;
   }
 }
