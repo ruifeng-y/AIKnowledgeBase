@@ -4,6 +4,8 @@ import type { Request, Response } from 'express';
 import { AppError, ERROR_CODES } from './app-errors';
 import { VectorSearchError } from '../../modules/retrieval/domain/vector-search.port';
 import { HybridSearchError } from '../../modules/retrieval/domain/hybrid-search.port';
+import { RerankedSearchError } from '../../modules/retrieval/domain/reranked-search.port';
+import { RerankerError } from '../../modules/retrieval/domain/reranker.port';
 
 interface ErrorResponseBody {
   error: {
@@ -43,8 +45,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       status = exception.httpStatus;
       code = exception.code;
       message = exception.message;
-    } else if (exception instanceof VectorSearchError || exception instanceof HybridSearchError) {
+    } else if (
+      exception instanceof VectorSearchError ||
+      exception instanceof HybridSearchError ||
+      exception instanceof RerankedSearchError
+    ) {
       status = exception.httpStatus;
+      code = exception.code;
+      message = exception.message;
+    } else if (exception instanceof RerankerError) {
+      status = exception.code === 'RERANKER_INVALID_RESPONSE' ? 500 : 500;
       code = exception.code;
       message = exception.message;
     } else if (exception instanceof HttpException) {
