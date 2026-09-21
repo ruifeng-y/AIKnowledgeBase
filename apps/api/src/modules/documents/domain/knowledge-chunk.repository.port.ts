@@ -4,6 +4,7 @@ export interface KnowledgeChunkItem {
   chunkIndex: number;
   content: string;
   tokenCount: number | null;
+  documentVersionId: string;
   metadata: Record<string, unknown>;
 }
 

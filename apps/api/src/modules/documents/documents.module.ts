@@ -73,9 +73,15 @@ import type { ProcessingJobRepositoryPort } from './domain/processing-job.reposi
     },
     {
       provide: DocumentChunksApplicationService,
-      useFactory: (authorization: AuthorizationService, chunks: KnowledgeChunkRepositoryPort) =>
-        new DocumentChunksApplicationService(authorization, chunks),
-      inject: [AuthorizationService, KNOWLEDGE_CHUNK_REPOSITORY],
+      useFactory: (
+        authorization: AuthorizationService,
+        chunks: KnowledgeChunkRepositoryPort,
+        documents: DocumentRepositoryAdapter,
+      ) =>
+        new DocumentChunksApplicationService(authorization, chunks, {
+          findVersionById: (versionId) => documents.findVersionById(versionId),
+        }),
+      inject: [AuthorizationService, KNOWLEDGE_CHUNK_REPOSITORY, DOCUMENT_REPOSITORY],
     },
   ],
   exports: [

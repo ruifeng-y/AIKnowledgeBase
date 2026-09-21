@@ -11,6 +11,7 @@ function mapChunk(row: {
   chunkIndex: number;
   content: string;
   tokenCount: number | null;
+  documentVersionId: string;
   metadata: Record<string, unknown>;
 }): KnowledgeChunkItem {
   return {
@@ -19,6 +20,7 @@ function mapChunk(row: {
     chunkIndex: row.chunkIndex,
     content: row.content,
     tokenCount: row.tokenCount,
+    documentVersionId: row.documentVersionId,
     metadata: row.metadata,
   };
 }
