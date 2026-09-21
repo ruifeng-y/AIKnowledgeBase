@@ -30,7 +30,7 @@ type MulterFile = UploadFileInput;
 export class SpaceDocumentsController {
   constructor(private readonly documents: DocumentApplicationService) {}
 
-  @Post('workspaces/:workspaceId/spaces/:spaceId/documents')
+  @Post('spaces/:spaceId/documents')
   @ApiOperation({ summary: 'Create document metadata in a knowledge space' })
   create(
     @CurrentUser() user: AuthenticatedUser,
@@ -40,7 +40,7 @@ export class SpaceDocumentsController {
     return this.documents.createMetadataOnly(user.id, spaceId, body);
   }
 
-  @Get('workspaces/:workspaceId/spaces/:spaceId/documents')
+  @Get('spaces/:spaceId/documents')
   @ApiOperation({ summary: 'List documents in a knowledge space' })
   list(@CurrentUser() user: AuthenticatedUser, @Param('spaceId') spaceId: string) {
     return this.documents.listInSpace(user.id, spaceId);

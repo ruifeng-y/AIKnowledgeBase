@@ -130,7 +130,7 @@ describe('V0.4-F Document + MinIO integration', () => {
     // create metadata-only documents
     docA = (
       await request(server())
-        .post(`/api/v1/workspaces/${wsA}/spaces/${spaceA}/documents`)
+        .post(`/api/v1/spaces/${spaceA}/documents`)
         .set('Authorization', `Bearer ${tokenA}`)
         .send({ title: 'Architecture notes' })
         .expect(201)
@@ -145,7 +145,7 @@ describe('V0.4-F Document + MinIO integration', () => {
 
     docB = (
       await request(server())
-        .post(`/api/v1/workspaces/${wsB}/spaces/${spaceB}/documents`)
+        .post(`/api/v1/spaces/${spaceB}/documents`)
         .set('Authorization', `Bearer ${tokenB}`)
         .send({ title: 'B notes' })
         .expect(201)
@@ -153,7 +153,7 @@ describe('V0.4-F Document + MinIO integration', () => {
 
     // list/get own
     await request(server())
-      .get(`/api/v1/workspaces/${wsA}/spaces/${spaceA}/documents`)
+      .get(`/api/v1/spaces/${spaceA}/documents`)
       .set('Authorization', `Bearer ${tokenA}`)
       .expect(200);
     await request(server())
@@ -270,8 +270,8 @@ describe('V0.4-F Document + MinIO integration', () => {
 
     await expect404('get', `/api/v1/documents/${docB}`, tokenA);
     await expect404('get', `/api/v1/documents/${docA}`, tokenB);
-    await expect404('get', `/api/v1/workspaces/${wsB}/spaces/${spaceB}/documents`, tokenA);
-    await expect404('get', `/api/v1/workspaces/${wsA}/spaces/${spaceA}/documents`, tokenB);
+    await expect404('get', `/api/v1/spaces/${spaceB}/documents`, tokenA);
+    await expect404('get', `/api/v1/spaces/${spaceA}/documents`, tokenB);
     await request(server())
       .post(`/api/v1/spaces/${spaceB}/documents/upload`)
       .set('Authorization', `Bearer ${tokenA}`)

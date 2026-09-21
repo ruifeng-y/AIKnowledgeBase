@@ -37,9 +37,9 @@ try {
   $wsId = ($ws.Content | ConvertFrom-Json).id
   $sp = Call-Api POST "/api/v1/workspaces/$wsId/spaces" $tok @{ name = "RT Space"; slug = "rt-space-f-$suffix" }
   $spId = ($sp.Content | ConvertFrom-Json).id
-  $doc = Call-Api POST "/api/v1/workspaces/$wsId/spaces/$spId/documents" $tok @{ title = "RT Doc" }
+  $doc = Call-Api POST "/api/v1/spaces/$spId/documents" $tok @{ title = "RT Doc" }
   $docId = ($doc.Content | ConvertFrom-Json).id
-  $list = Call-Api GET "/api/v1/workspaces/$wsId/spaces/$spId/documents" $tok $null
+  $list = Call-Api GET "/api/v1/spaces/$spId/documents" $tok $null
   $get = Call-Api GET "/api/v1/documents/$docId" $tok $null
   $patch = Call-Api PATCH "/api/v1/documents/$docId" $tok @{ title = "RT Doc v2"; description = "x" }
   Write-Host "CRUD reg=$($reg.StatusCode) ws=$($ws.StatusCode) space=$($sp.StatusCode) doc=$($doc.StatusCode) list=$($list.StatusCode) get=$($get.StatusCode) patch=$($patch.StatusCode)"
