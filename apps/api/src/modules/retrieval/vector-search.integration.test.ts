@@ -482,7 +482,7 @@ describe('V0.4-J Vector Retrieval integration', () => {
     }).expect(200);
     expect(afterOtherModel.body.total).toBe(0);
 
-    // restore mock, then different dimension on same provider+model
+    // restore mock, then different dimension is a distinct identity (P1-A)
     await processVersion(documentId, versionId);
     const chunksDim = await knowledgeChunkRepository.listByVersion(versionId);
     for (const chunk of chunksDim) {
@@ -494,11 +494,23 @@ describe('V0.4-J Vector Retrieval integration', () => {
         vector: new Array(768).fill(0.05),
       });
     }
+    // 384-identity rows still exist and remain searchable by identity (provider, model, 384)
     const afterOtherDim = await searchVector(user.token, spaceId, {
       query: 'JWT authentication',
       threshold: -1,
     }).expect(200);
-    expect(afterOtherDim.body.total).toBe(0);
+    expect(afterOtherDim.body.total).toBeGreaterThan(0);
+    for (const item of afterOtherDim.body.items) {
+      expect(item.embedding.dimension).toBe(384);
+    }
+
+    // remove 384-identity embeddings → search empty even though 768 rows remain
+    await deleteEmbeddings(versionId, embedConfig.provider, embedConfig.model);
+    const afterDimMismatch = await searchVector(user.token, spaceId, {
+      query: 'JWT authentication',
+      threshold: -1,
+    }).expect(200);
+    expect(afterDimMismatch.body.total).toBe(0);
 
     // missing embedding entirely
     await processVersion(documentId, versionId);

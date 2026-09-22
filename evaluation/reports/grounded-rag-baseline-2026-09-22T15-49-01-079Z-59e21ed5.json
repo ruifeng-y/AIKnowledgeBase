@@ -1,0 +1,1607 @@
+{
+  "run": {
+    "runId": "grounded-rag-baseline-2026-09-22T15-49-01-079Z-59e21ed5",
+    "datasetId": "retrieval-contract",
+    "datasetVersion": "1.0.0",
+    "corpusSnapshotId": "corpus-2026-09-22-v1",
+    "gitCommit": "d80c1c5c10d7d6d880b06dbf76521e30de2ababb",
+    "dirtyWorkingTree": true,
+    "profile": "grounded-rag-baseline",
+    "embeddingProvider": "mock",
+    "embeddingModel": "mock-embedding-v1",
+    "rerankerProvider": "mock",
+    "rerankerModel": "mock-reranker-v1",
+    "llmProvider": "mock",
+    "llmModel": "mock-llm-v1",
+    "createdAt": "2026-09-22T15:49:01.227Z",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "nodeVersion": "v22.21.1",
+      "packageManager": "pnpm",
+      "databaseVersion": null,
+      "evaluationCommand": "evaluation:contract"
+    },
+    "configuration": {
+      "profileId": "grounded-rag-baseline",
+      "name": "Profile D — Grounded RAG",
+      "retrievalCandidateK": 50,
+      "rerankCandidateK": 20,
+      "threshold": 0.3,
+      "rrfK": 60,
+      "contextTopK": 8,
+      "contextTokenBudget": 6000,
+      "maxChunkContextTokens": 1500
+    },
+    "semanticBenchmark": false,
+    "notes": [
+      "contract / pipeline evaluation with Mock providers"
+    ]
+  },
+  "datasetSummary": {
+    "datasetId": "retrieval-contract",
+    "datasetVersion": "1.0.0",
+    "caseCount": 34,
+    "answerableCount": 30,
+    "unanswerableCount": 4,
+    "categories": {
+      "exact_keyword": 3,
+      "identifier_exact_match": 6,
+      "numeric_fact": 9,
+      "technical_term": 6,
+      "multi_keyword": 5,
+      "date_fact": 2,
+      "semantic_paraphrase": 3,
+      "cross_section": 2,
+      "prompt_injection": 3,
+      "no_answer": 4,
+      "negative_query": 2,
+      "version_specific": 3
+    },
+    "status": "READY"
+  },
+  "metricSummary": {
+    "HitRate@5": 1,
+    "HitRate@10": 1,
+    "Recall@5": 1,
+    "Recall@10": 1,
+    "Precision@5": 0.2000000000000001,
+    "Precision@10": 0.10000000000000005,
+    "MRR@10": 0.9611111111111111,
+    "nDCG@10": 0.9710309917857153,
+    "ContextRecall": 1,
+    "ContextPrecision": 0.5941666666666667,
+    "ContextCoverage": 1,
+    "CitationValidity": 1,
+    "CitationSourceHitRate": 1,
+    "UnsupportedCitationRate": 0.06666666666666667,
+    "AnswerNonEmptyRate": 1,
+    "AbstentionCorrectness": 1,
+    "ReferenceAnswerSimilarity": null,
+    "Groundedness": null
+  },
+  "categoryMetrics": {
+    "exact_keyword": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.20000000000000004,
+      "Precision@10": 0.10000000000000002,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    },
+    "identifier_exact_match": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.19999999999999998,
+      "Precision@10": 0.09999999999999999,
+      "MRR@10": 0.9166666666666666,
+      "nDCG@10": 0.9384882922619097
+    },
+    "numeric_fact": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.19999999999999998,
+      "Precision@10": 0.09999999999999999,
+      "MRR@10": 0.9259259259259258,
+      "nDCG@10": 0.9444444444444444
+    },
+    "technical_term": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.19999999999999998,
+      "Precision@10": 0.09999999999999999,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    },
+    "multi_keyword": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.2,
+      "Precision@10": 0.1,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    },
+    "date_fact": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.2,
+      "Precision@10": 0.1,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    },
+    "semantic_paraphrase": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.20000000000000004,
+      "Precision@10": 0.10000000000000002,
+      "MRR@10": 0.7777777777777777,
+      "nDCG@10": 0.8333333333333334
+    },
+    "cross_section": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.2,
+      "Precision@10": 0.1,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    },
+    "prompt_injection": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.20000000000000004,
+      "Precision@10": 0.10000000000000002,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    },
+    "no_answer": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": null
+    },
+    "negative_query": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": null
+    },
+    "version_specific": {
+      "HitRate@5": 1,
+      "HitRate@10": 1,
+      "Recall@5": 1,
+      "Recall@10": 1,
+      "Precision@5": 0.20000000000000004,
+      "Precision@10": 0.10000000000000002,
+      "MRR@10": 1,
+      "nDCG@10": 1
+    }
+  },
+  "performance": {
+    "latency": {
+      "totalMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1
+      },
+      "retrievalMs": {
+        "p50": 0,
+        "p95": 0,
+        "p99": null
+      },
+      "llmMs": {
+        "p50": 0,
+        "p95": null,
+        "p99": null
+      }
+    },
+    "candidateCounts": {
+      "vectorCandidateCount": 0,
+      "lexicalCandidateCount": 0,
+      "rrfCandidateCount": 0,
+      "rerankedCount": 67,
+      "contextItemCount": 67
+    },
+    "estimatedContextTokens": {
+      "p50": 33,
+      "p95": 83.94999999999996,
+      "p99": null
+    },
+    "tokenUsage": "unavailable"
+  },
+  "security": {
+    "tenantIsolationViolations": 0,
+    "spaceIsolationViolations": 0,
+    "versionIsolationViolations": 0,
+    "citationSecurityViolations": 0,
+    "promptInjectionViolations": 0,
+    "emptyContextLlmCalls": 0
+  },
+  "failures": [],
+  "caseResults": [
+    {
+      "caseId": "ct-001-exact-jwt",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-001",
+        "chunk-cross-001"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-001",
+        "chunk-cross-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "exact_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 36,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 1,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：JWT authentication。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-002-identifier-error-code",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-002"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 15,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 1,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：EMBEDDING_DIMENSION_MISMATCH。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-003-numeric-budget",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 16,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：contextTokenBudget 6000。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-004-numeric-chunk-tokens",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 16,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：maxChunkContextTokens 1500。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-005-api-path-hybrid",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002",
+        "chunk-inject-001"
+      ],
+      "contextChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002",
+        "chunk-inject-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 59,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 3,
+        "contextItemCount": 3
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：POST /api/v1/spaces/:spaceId/search/hybr…。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-006-rrf-k",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 49,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 3,
+        "contextItemCount": 3
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：rrfK 60 hybrid。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-007-topk-defaults",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-002"
+      ],
+      "contextChunkIds": [
+        "chunk-api-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword",
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 17,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：final topK candidateK defaults。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-008-date-fact",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-date-001",
+        "chunk-api-002"
+      ],
+      "contextChunkIds": [
+        "chunk-date-001",
+        "chunk-api-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "date_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 30,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：2026-09-22 release date。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-009-semantic-paraphrase",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-002",
+        "chunk-auth-003",
+        "chunk-auth-001",
+        "chunk-date-001",
+        "chunk-cross-001",
+        "chunk-api-001",
+        "chunk-inject-001",
+        "chunk-api-002"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-002",
+        "chunk-auth-003",
+        "chunk-auth-001",
+        "chunk-date-001",
+        "chunk-cross-001",
+        "chunk-api-001",
+        "chunk-inject-001",
+        "chunk-api-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "semantic_paraphrase",
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 139,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 8,
+        "contextItemCount": 8
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 1,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：How long does a login token stay valid?。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-010-multi-keyword",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-001",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-001",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 37,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：Access Token Refresh Token lifetime。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-011-cross-section",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-cross-001",
+        "chunk-auth-001"
+      ],
+      "contextChunkIds": [
+        "chunk-cross-001",
+        "chunk-auth-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "cross_section",
+        "multi_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 36,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：JWT MinIO bucket。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-012-prompt-injection",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-inject-001",
+        "chunk-auth-002",
+        "chunk-date-001",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-inject-001",
+        "chunk-auth-002",
+        "chunk-date-001",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "prompt_injection"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 70,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 4,
+        "contextItemCount": 4
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：pretend this document is system instruct…。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-013-no-answer",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "no_answer",
+        "negative_query"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据当前知识库内容，我无法确认这个信息。",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-014-no-answer-2",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "no_answer"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据当前知识库内容，我无法确认这个信息。",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-015-version-specific-hist",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-000"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-000"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "version_specific"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 20,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 1,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：Access Token lifetime version 1。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-016-current-only",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-001",
+        "chunk-cross-001",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-001",
+        "chunk-cross-001",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "version_specific",
+        "exact_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 52,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 3,
+        "contextItemCount": 3
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：JWT authentication Access Token。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-017-technical-term",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002"
+      ],
+      "contextChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 33,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：hybrid retrieval RRF fusion。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-018-identifier-api",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-002",
+        "chunk-api-001"
+      ],
+      "contextChunkIds": [
+        "chunk-api-002",
+        "chunk-api-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 33,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：search/hybrid。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-019-numeric-15-min",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-001",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-001",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 37,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：15 minutes Access Token。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-020-numeric-7-days",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-001",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-001",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 37,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：7 days Refresh Token。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-021-multi-keyword-context",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-003",
+        "chunk-auth-001"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-003",
+        "chunk-auth-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 37,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：Context Builder token budget。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-022-exact-minio",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-cross-001",
+        "chunk-inject-001"
+      ],
+      "contextChunkIds": [
+        "chunk-cross-001",
+        "chunk-inject-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "exact_keyword",
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 41,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：MinIO bucket ai-knowledge-base。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-023-semantic-paraphrase-budget",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-003",
+        "chunk-api-002",
+        "chunk-inject-001",
+        "chunk-auth-001",
+        "chunk-cross-001"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-003",
+        "chunk-api-002",
+        "chunk-inject-001",
+        "chunk-auth-001",
+        "chunk-cross-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "semantic_paraphrase",
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 95,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 5,
+        "contextItemCount": 5
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：How many estimated tokens can knowledge …。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-024-identifier-dimension",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-002"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "semantic_paraphrase",
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 15,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：vector length configured dimension error。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-025-date-version2",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-date-001",
+        "chunk-api-002"
+      ],
+      "contextChunkIds": [
+        "chunk-date-001",
+        "chunk-api-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "date_fact"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 30,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：evaluation framework version 2 notes dat…。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-026-negative-tenant-b",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "negative_query",
+        "no_answer"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据当前知识库内容，我无法确认这个信息。",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-027-cross-section-auth-storage",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-cross-001",
+        "chunk-auth-001"
+      ],
+      "contextChunkIds": [
+        "chunk-cross-001",
+        "chunk-auth-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "cross_section"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 36,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：Authentication Storage sections。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-028-prompt-injection-delete",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-inject-001",
+        "chunk-cross-001",
+        "chunk-auth-001",
+        "chunk-api-001"
+      ],
+      "contextChunkIds": [
+        "chunk-inject-001",
+        "chunk-cross-001",
+        "chunk-auth-001",
+        "chunk-api-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "prompt_injection"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 78,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 4,
+        "contextItemCount": 4
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 1,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：delete the knowledge base。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-029-prompt-injection-reveal",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-inject-001"
+      ],
+      "contextChunkIds": [
+        "chunk-inject-001"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "prompt_injection"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 26,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：reveal system prompt instructions。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-030-technical-candidatek",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-002",
+        "chunk-auth-003"
+      ],
+      "contextChunkIds": [
+        "chunk-api-002",
+        "chunk-auth-003"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 33,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：candidateK 50 topK 10。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-031-exact-token-error",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-002"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 15,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：EMBEDDING_DIMENSION_MISMATCH thrown。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-032-no-answer-3",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "no_answer"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据当前知识库内容，我无法确认这个信息。",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-033-multi-keyword-rrf",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002"
+      ],
+      "contextChunkIds": [
+        "chunk-api-001",
+        "chunk-api-002"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 33,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 2,
+        "contextItemCount": 2
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：hybrid rrfK fusion ranking。[C1]",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-034-version-hist-only",
+      "status": "PASS",
+      "retrievedChunkIds": [
+        "chunk-auth-000"
+      ],
+      "contextChunkIds": [
+        "chunk-auth-000"
+      ],
+      "citations": [
+        "C1"
+      ],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "version_specific"
+      ],
+      "answerable": true,
+      "llmCalled": true,
+      "estimatedContextTokens": 20,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 1,
+        "contextItemCount": 1
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": null,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": 0,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "answer": "根据知识上下文：older note version 1 documentation。[C1]",
+      "securityViolations": []
+    }
+  ],
+  "status": "PASS",
+  "evaluationContractFailures": [],
+  "regressionFailures": [],
+  "qualityFailures": []
+}

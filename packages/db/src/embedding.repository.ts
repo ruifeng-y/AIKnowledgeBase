@@ -34,34 +34,12 @@ function mapRow(row: {
 
 export const embeddingRecordRepository = {
   /**
-   * Idempotent upsert for (chunkId, provider, model).
-   * Schema has no UNIQUE on that triple in V0.4-C; application-level upsert avoids duplicates.
+   * Database-native upsert on EmbeddingRecordIdentity (chunkId, provider, model, dimensions).
+   * Concurrency enforced by UNIQUE constraint + ON CONFLICT DO UPDATE.
    */
   async upsertForChunk(input: EmbeddingUpsertInput): Promise<EmbeddingRecordRow> {
     const vectorLiteral = `[${input.vector.join(',')}]`;
-    const updated = await prisma.$queryRaw<
-      Array<{
-        id: string;
-        chunk_id: string;
-        provider: string;
-        model: string;
-        dimensions: number;
-      }>
-    >`
-      UPDATE embedding_records
-      SET embedding = ${vectorLiteral}::vector,
-          dimensions = ${input.dimension},
-          updated_at = NOW()
-      WHERE chunk_id = ${input.chunkId}::uuid
-        AND provider = ${input.provider}
-        AND model = ${input.model}
-      RETURNING id, chunk_id, provider, model, dimensions
-    `;
-    if (updated[0]) {
-      return mapRow(updated[0]);
-    }
-
-    const inserted = await prisma.$queryRaw<
+    const rows = await prisma.$queryRaw<
       Array<{
         id: string;
         chunk_id: string;
@@ -71,10 +49,23 @@ export const embeddingRecordRepository = {
       }>
     >`
       INSERT INTO embedding_records (id, chunk_id, provider, model, dimensions, embedding, created_at, updated_at)
-      VALUES (gen_random_uuid(), ${input.chunkId}::uuid, ${input.provider}, ${input.model}, ${input.dimension}, ${vectorLiteral}::vector, NOW(), NOW())
+      VALUES (
+        gen_random_uuid(),
+        ${input.chunkId}::uuid,
+        ${input.provider},
+        ${input.model},
+        ${input.dimension},
+        ${vectorLiteral}::vector,
+        NOW(),
+        NOW()
+      )
+      ON CONFLICT (chunk_id, provider, model, dimensions)
+      DO UPDATE SET
+        embedding = EXCLUDED.embedding,
+        updated_at = NOW()
       RETURNING id, chunk_id, provider, model, dimensions
     `;
-    const row = inserted[0];
+    const row = rows[0];
     if (!row) {
       throw new Error('EMBEDDING_PERSIST_ERROR');
     }
@@ -115,6 +106,23 @@ export const embeddingRecordRepository = {
       SELECT COUNT(*)::bigint AS count
       FROM embedding_records
       WHERE chunk_id = ${chunkId}::uuid AND provider = ${provider} AND model = ${model}
+    `;
+    return Number(rows[0]?.count ?? 0);
+  },
+
+  async countByIdentity(
+    chunkId: string,
+    provider: string,
+    model: string,
+    dimensions: number,
+  ): Promise<number> {
+    const rows = await prisma.$queryRaw<Array<{ count: bigint }>>`
+      SELECT COUNT(*)::bigint AS count
+      FROM embedding_records
+      WHERE chunk_id = ${chunkId}::uuid
+        AND provider = ${provider}
+        AND model = ${model}
+        AND dimensions = ${dimensions}
     `;
     return Number(rows[0]?.count ?? 0);
   },

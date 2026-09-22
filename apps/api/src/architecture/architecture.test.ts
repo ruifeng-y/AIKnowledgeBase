@@ -70,6 +70,9 @@ describe('architecture rules', () => {
       /^bullmq$/,
       /^openai$/,
       /^@anthropic-ai\//,
+      /^@akb\/db/,
+      /ai-provider\.ports/,
+      /mock-ai-providers/,
     ];
     for (const file of applicationFiles) {
       const imports = importsOf(file);
@@ -100,5 +103,33 @@ describe('architecture rules', () => {
     }
     const imports = importsOf(healthController);
     expect(hasForbidden(imports, [/@prisma\//, /^minio$/, /^bullmq$/, /@akb\/db/])).toBe(false);
+  });
+
+  it('no legacy ai-provider scaffolding remains', () => {
+    const legacy = allFiles.filter((f) => {
+      const r = relative(f);
+      return (
+        r.includes('ai-provider.ports') ||
+        r.includes('mock-ai-providers') ||
+        r.includes('ai-providers.module')
+      );
+    });
+    expect(legacy, `legacy AI scaffolding still present: ${legacy.join(', ')}`).toEqual([]);
+  });
+
+  it('evaluation layer does not import Prisma or write production repositories', () => {
+    const evalRoot = path.resolve(__dirname, '..', '..', '..', 'evaluation');
+    if (!fs.existsSync(evalRoot)) {
+      return;
+    }
+    const evalFiles: string[] = [];
+    listFiles(evalRoot, evalFiles);
+    for (const file of evalFiles) {
+      const imports = importsOf(file);
+      expect(
+        hasForbidden(imports, [/@prisma\//, /(^|\/)prisma$/i, /@akb\/db/]),
+        `${file} evaluation import violates boundary: ${imports.join(', ')}`,
+      ).toBe(false);
+    }
   });
 });
