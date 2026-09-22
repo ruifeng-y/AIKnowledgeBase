@@ -34,6 +34,8 @@ export class EmbeddingService {
 
   static createDefault(): EmbeddingService {
     const config = loadEmbeddingConfig(process.env);
+    // Production / mock selected via EMBEDDING_PROVIDER; registry lives in API infrastructure.
+    // Worker keeps local mock construction for default test/dev paths.
     return new EmbeddingService(new MockEmbeddingProvider(config), config);
   }
 

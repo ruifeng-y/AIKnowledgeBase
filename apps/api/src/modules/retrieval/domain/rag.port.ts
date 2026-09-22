@@ -390,6 +390,16 @@ export interface LlmGenerateInput {
 
 export interface LlmGenerateResult {
   answer: string;
+  provider?: string;
+  model?: string;
+  usage?:
+    | {
+        inputTokens: number | null;
+        outputTokens: number | null;
+        totalTokens: number | null;
+      }
+    | 'unavailable';
+  finishReason?: string | null;
 }
 
 export interface LlmProviderPort {

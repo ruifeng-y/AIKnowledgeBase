@@ -18,7 +18,8 @@
     "evaluation:contract": "pnpm --filter @akb/evaluation evaluation:contract",
     "evaluation:benchmark": "pnpm --filter @akb/evaluation evaluation:benchmark",
     "evaluation:baseline": "pnpm --filter @akb/evaluation evaluation:baseline",
-    "evaluation:compare": "pnpm --filter @akb/evaluation evaluation:compare"
+    "evaluation:compare": "pnpm --filter @akb/evaluation evaluation:compare",
+    "provider:smoke": "pnpm --filter @akb/api exec tsx src/infrastructure/providers/smoke.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

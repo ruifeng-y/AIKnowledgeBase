@@ -132,4 +132,35 @@ describe('architecture rules', () => {
       ).toBe(false);
     }
   });
+
+  it('domain does not import provider HTTP transport or concrete adapters', () => {
+    for (const file of domainFiles) {
+      const imports = importsOf(file);
+      expect(
+        hasForbidden(imports, [
+          /infrastructure\/providers/,
+          /openai-compatible/,
+          /http-transport/,
+          /^node-fetch$/,
+          /^undici$/,
+        ]),
+        `${relative(file)} domain must not import provider transport`,
+      ).toBe(false);
+    }
+  });
+
+  it('application does not import provider adapters or HTTP transport', () => {
+    for (const file of applicationFiles) {
+      const imports = importsOf(file);
+      expect(
+        hasForbidden(imports, [
+          /infrastructure\/providers/,
+          /openai-compatible/,
+          /http-transport/,
+          /provider\.registry/,
+        ]),
+        `${relative(file)} application must not import provider adapters`,
+      ).toBe(false);
+    }
+  });
 });

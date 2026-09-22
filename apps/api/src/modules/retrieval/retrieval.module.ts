@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import type { EmbeddingProviderPort } from '@akb/ai';
-import { loadEmbeddingConfig, MockEmbeddingProvider } from '@akb/ai';
 import { AppConfigModule } from '../../common/config/app-config.module';
 import { AuthorizationService } from '../shared/application/authorization.service';
 import { WorkspacesModule } from '../workspaces/workspaces.module';
@@ -17,11 +16,7 @@ import {
   LEXICAL_SEARCH_REPOSITORY,
   type LexicalSearchRepositoryPort,
 } from './domain/lexical-search.port';
-import {
-  RETRIEVAL_RERANKER_PROVIDER,
-  loadRerankerIdentity,
-  type RerankerProviderPort,
-} from './domain/reranker.port';
+import { RETRIEVAL_RERANKER_PROVIDER, type RerankerProviderPort } from './domain/reranker.port';
 import {
   CONTEXT_BUILDER,
   DefaultContextBuilder,
@@ -38,12 +33,7 @@ import { RerankedSearchController } from './presentation/reranked-search.control
 import { RagQueryController } from './presentation/rag-query.controller';
 import { PgVectorSearchRepository } from '../../infrastructure/retrieval/pgvector-search.repository';
 import { PgLexicalSearchRepository } from '../../infrastructure/retrieval/pg-lexical-search.repository';
-import { InfraMockRerankerProvider } from '../../infrastructure/retrieval/mock-reranker.provider';
-import {
-  loadLlmIdentity,
-  loadMockLlmMode,
-  MockLlmProvider,
-} from '../../infrastructure/llm/mock-llm.provider';
+import { providerRegistry } from '../../infrastructure/providers/provider.registry';
 
 @Module({
   imports: [AppConfigModule, WorkspacesModule],
@@ -60,22 +50,15 @@ import {
     { provide: RAG_PROMPT_BUILDER, useClass: DefaultRagPromptBuilder },
     {
       provide: EMBEDDING_PROVIDER,
-      useFactory: (): EmbeddingProviderPort => {
-        const config = loadEmbeddingConfig(process.env);
-        return new MockEmbeddingProvider(config);
-      },
+      useFactory: (): EmbeddingProviderPort => providerRegistry.resolveEmbedding(),
     },
     {
       provide: RETRIEVAL_RERANKER_PROVIDER,
-      useFactory: (): RerankerProviderPort => {
-        return new InfraMockRerankerProvider(loadRerankerIdentity(process.env));
-      },
+      useFactory: (): RerankerProviderPort => providerRegistry.resolveReranker(),
     },
     {
       provide: RETRIEVAL_LLM_PROVIDER,
-      useFactory: (): LlmProviderPort => {
-        return new MockLlmProvider(loadLlmIdentity(process.env), loadMockLlmMode(process.env));
-      },
+      useFactory: (): LlmProviderPort => providerRegistry.resolveLlm(),
     },
     {
       provide: VectorSearchApplicationService,
