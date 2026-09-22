@@ -6,6 +6,7 @@ import { VectorSearchError } from '../../modules/retrieval/domain/vector-search.
 import { HybridSearchError } from '../../modules/retrieval/domain/hybrid-search.port';
 import { RerankedSearchError } from '../../modules/retrieval/domain/reranked-search.port';
 import { RerankerError } from '../../modules/retrieval/domain/reranker.port';
+import { RagError } from '../../modules/retrieval/domain/rag.port';
 
 interface ErrorResponseBody {
   error: {
@@ -48,7 +49,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     } else if (
       exception instanceof VectorSearchError ||
       exception instanceof HybridSearchError ||
-      exception instanceof RerankedSearchError
+      exception instanceof RerankedSearchError ||
+      exception instanceof RagError
     ) {
       status = exception.httpStatus;
       code = exception.code;

@@ -148,6 +148,7 @@ export interface RerankedSearchResultItem {
   documentVersionId: string;
   knowledgeSpaceId: string;
   content: string;
+  chunkIndex: number;
   score: number;
   metadata: Record<string, unknown>;
 }

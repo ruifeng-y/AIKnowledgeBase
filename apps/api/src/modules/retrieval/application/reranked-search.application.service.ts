@@ -218,6 +218,7 @@ export class RerankedSearchApplicationService {
       documentVersionId: row.documentVersionId,
       knowledgeSpaceId: row.knowledgeSpaceId,
       content: row.content,
+      chunkIndex: row.chunkIndex,
       score: row.rerankerScore,
       metadata: row.metadata,
     }));
