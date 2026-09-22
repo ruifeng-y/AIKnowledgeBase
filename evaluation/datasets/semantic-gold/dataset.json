@@ -1,0 +1,9 @@
+{
+  "datasetId": "semantic-gold",
+  "version": "0.1.0",
+  "createdAt": "2026-09-22T00:00:00.000Z",
+  "description": "Semantic gold dataset scaffold. Capacity for 50+ curated cases. Status NOT READY until human-curated ground truth is available.",
+  "corpusSnapshotId": "corpus-2026-09-22-v1",
+  "status": "NOT_READY",
+  "cases": []
+}

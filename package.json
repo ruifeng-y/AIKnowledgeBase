@@ -14,7 +14,11 @@
     "typecheck": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" typecheck",
     "test": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "evaluation:contract": "pnpm --filter @akb/evaluation evaluation:contract",
+    "evaluation:benchmark": "pnpm --filter @akb/evaluation evaluation:benchmark",
+    "evaluation:baseline": "pnpm --filter @akb/evaluation evaluation:baseline",
+    "evaluation:compare": "pnpm --filter @akb/evaluation evaluation:compare"
   },
   "devDependencies": {
     "@eslint/js": "^9.18.0",

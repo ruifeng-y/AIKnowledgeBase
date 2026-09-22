@@ -1,0 +1,1466 @@
+{
+  "run": {
+    "runId": "vector-baseline-2026-09-22T15-29-25-333Z-e95956f6",
+    "datasetId": "retrieval-contract",
+    "datasetVersion": "1.0.0",
+    "corpusSnapshotId": "corpus-2026-09-22-v1",
+    "gitCommit": "357719e42a68fcd6acb405384e2164ae08b63955",
+    "dirtyWorkingTree": true,
+    "profile": "vector-baseline",
+    "embeddingProvider": "mock",
+    "embeddingModel": "mock-embedding-v1",
+    "rerankerProvider": null,
+    "rerankerModel": null,
+    "llmProvider": null,
+    "llmModel": null,
+    "createdAt": "2026-09-22T15:29:25.478Z",
+    "environment": {
+      "os": "win32 10.0.26200",
+      "nodeVersion": "v22.21.1",
+      "packageManager": "pnpm",
+      "databaseVersion": null,
+      "evaluationCommand": "evaluation:contract"
+    },
+    "configuration": {
+      "profileId": "vector-baseline",
+      "name": "Profile A — Vector",
+      "topK": 10,
+      "threshold": 0.3
+    },
+    "semanticBenchmark": false,
+    "notes": [
+      "contract / pipeline evaluation with Mock providers"
+    ]
+  },
+  "datasetSummary": {
+    "datasetId": "retrieval-contract",
+    "datasetVersion": "1.0.0",
+    "caseCount": 34,
+    "answerableCount": 30,
+    "unanswerableCount": 4,
+    "categories": {
+      "exact_keyword": 3,
+      "identifier_exact_match": 6,
+      "numeric_fact": 9,
+      "technical_term": 6,
+      "multi_keyword": 5,
+      "date_fact": 2,
+      "semantic_paraphrase": 3,
+      "cross_section": 2,
+      "prompt_injection": 3,
+      "no_answer": 4,
+      "negative_query": 2,
+      "version_specific": 3
+    },
+    "status": "READY"
+  },
+  "metricSummary": {
+    "HitRate@5": 0,
+    "HitRate@10": 0,
+    "Recall@5": 0,
+    "Recall@10": 0,
+    "Precision@5": 0,
+    "Precision@10": 0,
+    "MRR@10": 0,
+    "nDCG@10": 0,
+    "ContextRecall": null,
+    "ContextPrecision": null,
+    "ContextCoverage": null,
+    "CitationValidity": null,
+    "CitationSourceHitRate": null,
+    "UnsupportedCitationRate": null,
+    "AnswerNonEmptyRate": null,
+    "AbstentionCorrectness": null,
+    "ReferenceAnswerSimilarity": null,
+    "Groundedness": null
+  },
+  "categoryMetrics": {
+    "exact_keyword": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "identifier_exact_match": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "numeric_fact": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "technical_term": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "multi_keyword": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "date_fact": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "semantic_paraphrase": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "cross_section": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "prompt_injection": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    },
+    "no_answer": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": null
+    },
+    "negative_query": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": null
+    },
+    "version_specific": {
+      "HitRate@5": 0,
+      "HitRate@10": 0,
+      "Recall@5": 0,
+      "Recall@10": 0,
+      "Precision@5": 0,
+      "Precision@10": 0,
+      "MRR@10": 0,
+      "nDCG@10": 0
+    }
+  },
+  "performance": {
+    "latency": {
+      "totalMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": 1
+      },
+      "retrievalMs": {
+        "p50": 0,
+        "p95": 1,
+        "p99": null
+      },
+      "llmMs": {
+        "p50": null,
+        "p95": null,
+        "p99": null
+      }
+    },
+    "candidateCounts": {
+      "vectorCandidateCount": 0,
+      "lexicalCandidateCount": 0,
+      "rrfCandidateCount": 0,
+      "rerankedCount": 0,
+      "contextItemCount": 0
+    },
+    "estimatedContextTokens": {
+      "p50": 0,
+      "p95": 0,
+      "p99": null
+    },
+    "tokenUsage": "unavailable"
+  },
+  "security": {
+    "tenantIsolationViolations": 0,
+    "spaceIsolationViolations": 0,
+    "versionIsolationViolations": 0,
+    "citationSecurityViolations": 0,
+    "promptInjectionViolations": 0,
+    "emptyContextLlmCalls": 0
+  },
+  "failures": [
+    {
+      "caseId": "ct-001-exact-jwt",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-002-identifier-error-code",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-003-numeric-budget",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-004-numeric-chunk-tokens",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-005-api-path-hybrid",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-006-rrf-k",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-007-topk-defaults",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-008-date-fact",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-009-semantic-paraphrase",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-010-multi-keyword",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-011-cross-section",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-012-prompt-injection",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-015-version-specific-hist",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-016-current-only",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-017-technical-term",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-018-identifier-api",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-019-numeric-15-min",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-020-numeric-7-days",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-021-multi-keyword-context",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-022-exact-minio",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-023-semantic-paraphrase-budget",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-024-identifier-dimension",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-025-date-version2",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-027-cross-section-auth-storage",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-028-prompt-injection-delete",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-029-prompt-injection-reveal",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-030-technical-candidatek",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-031-exact-token-error",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-033-multi-keyword-rrf",
+      "status": "FAIL"
+    },
+    {
+      "caseId": "ct-034-version-hist-only",
+      "status": "FAIL"
+    }
+  ],
+  "caseResults": [
+    {
+      "caseId": "ct-001-exact-jwt",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "exact_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 1,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-002-identifier-error-code",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-003-numeric-budget",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 1,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-004-numeric-chunk-tokens",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 1,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-005-api-path-hybrid",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-006-rrf-k",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-007-topk-defaults",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword",
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-008-date-fact",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "date_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-009-semantic-paraphrase",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 1,
+      "category": [
+        "semantic_paraphrase",
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 1,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 1
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-010-multi-keyword",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-011-cross-section",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "cross_section",
+        "multi_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-012-prompt-injection",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "prompt_injection"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-013-no-answer",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "no_answer",
+        "negative_query"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-014-no-answer-2",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "no_answer"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-015-version-specific-hist",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "version_specific"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-016-current-only",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "version_specific",
+        "exact_keyword"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-017-technical-term",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-018-identifier-api",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-019-numeric-15-min",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-020-numeric-7-days",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-021-multi-keyword-context",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-022-exact-minio",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "exact_keyword",
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-023-semantic-paraphrase-budget",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "semantic_paraphrase",
+        "numeric_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-024-identifier-dimension",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "semantic_paraphrase",
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-025-date-version2",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "date_fact"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-026-negative-tenant-b",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "negative_query",
+        "no_answer"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-027-cross-section-auth-storage",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "cross_section"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-028-prompt-injection-delete",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "prompt_injection"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-029-prompt-injection-reveal",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "prompt_injection"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-030-technical-candidatek",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "numeric_fact",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-031-exact-token-error",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "identifier_exact_match"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-032-no-answer-3",
+      "status": "PASS",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "no_answer"
+      ],
+      "answerable": false,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-033-multi-keyword-rrf",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "multi_keyword",
+        "technical_term"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    },
+    {
+      "caseId": "ct-034-version-hist-only",
+      "status": "FAIL",
+      "retrievedChunkIds": [],
+      "contextChunkIds": [],
+      "citations": [],
+      "metrics": {},
+      "latencyMs": 0,
+      "category": [
+        "version_specific"
+      ],
+      "answerable": true,
+      "llmCalled": false,
+      "estimatedContextTokens": 0,
+      "candidateCounts": {
+        "vectorCandidateCount": 0,
+        "lexicalCandidateCount": 0,
+        "rrfCandidateCount": 0,
+        "rerankedCount": 0,
+        "contextItemCount": 0
+      },
+      "latencyBreakdown": {
+        "retrievalLatencyMs": 0,
+        "rerankLatencyMs": null,
+        "contextBuildLatencyMs": null,
+        "llmLatencyMs": null,
+        "totalLatencyMs": 0
+      },
+      "tokenUsage": "unavailable",
+      "securityViolations": []
+    }
+  ],
+  "status": "FAIL",
+  "evaluationContractFailures": [],
+  "regressionFailures": [],
+  "qualityFailures": [
+    "ct-001-exact-jwt",
+    "ct-002-identifier-error-code",
+    "ct-003-numeric-budget",
+    "ct-004-numeric-chunk-tokens",
+    "ct-005-api-path-hybrid",
+    "ct-006-rrf-k",
+    "ct-007-topk-defaults",
+    "ct-008-date-fact",
+    "ct-009-semantic-paraphrase",
+    "ct-010-multi-keyword",
+    "ct-011-cross-section",
+    "ct-012-prompt-injection",
+    "ct-015-version-specific-hist",
+    "ct-016-current-only",
+    "ct-017-technical-term",
+    "ct-018-identifier-api",
+    "ct-019-numeric-15-min",
+    "ct-020-numeric-7-days",
+    "ct-021-multi-keyword-context",
+    "ct-022-exact-minio",
+    "ct-023-semantic-paraphrase-budget",
+    "ct-024-identifier-dimension",
+    "ct-025-date-version2",
+    "ct-027-cross-section-auth-storage",
+    "ct-028-prompt-injection-delete",
+    "ct-029-prompt-injection-reveal",
+    "ct-030-technical-candidatek",
+    "ct-031-exact-token-error",
+    "ct-033-multi-keyword-rrf",
+    "ct-034-version-hist-only"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@akb/evaluation",
+  "private": true,
+  "version": "0.4.0",
+  "description": "Retrieval & RAG Evaluation Framework (V0.4-N)",
+  "scripts": {
+    "evaluation:contract": "tsx src/cli.ts contract",
+    "evaluation:benchmark": "tsx src/cli.ts benchmark",
+    "evaluation:baseline": "tsx src/cli.ts baseline",
+    "evaluation:compare": "tsx src/cli.ts compare",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}
