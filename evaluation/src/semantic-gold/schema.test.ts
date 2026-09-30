@@ -3,6 +3,7 @@ import {
   computeCorpusHash,
   computeDatasetContentHash,
   isHumanCuratedGold,
+  normalizeCategories,
   stableCaseId,
   validateSemanticGoldDataset,
   type SemanticGoldCase,
@@ -38,6 +39,7 @@ function draftCase(overrides: Partial<SemanticGoldCase> = {}): SemanticGoldCase 
     corpusVersion: 'corpus-test-v1',
     query: 'What is the retry policy?',
     category: ['technical_term'],
+    primaryCategory: 'technical_term',
     answerability: 'answerable',
     expectedRelevantChunks: [
       {
@@ -81,6 +83,45 @@ describe('semantic gold schema', () => {
     });
     expect(h1).not.toBe(h2);
     expect(computeDatasetContentHash(a)).toBe(h1);
+  });
+
+  it('separates case count from category assignment count', () => {
+    const dataset: SemanticGoldDataset = {
+      datasetId: 'semantic-gold',
+      datasetVersion: '0.1.0',
+      corpusVersion: 'corpus-test-v1',
+      createdAt: '2026-01-01T00:00:00.000Z',
+      description: 'x',
+      contentHash: '',
+      annotationStatus: 'DRAFT',
+      cases: [
+        draftCase({
+          category: ['numeric', 'exact_keyword'],
+          primaryCategory: 'numeric',
+        }),
+        draftCase({
+          id: 'semantic-0002',
+          query: 'second unique query about timeout',
+          category: ['technical_term'],
+          primaryCategory: 'technical_term',
+        }),
+      ],
+    };
+    const report = validateSemanticGoldDataset(dataset, corpus);
+    expect(report.distribution.caseCount).toBe(2);
+    expect(report.distribution.categoryAssignmentCount).toBe(3);
+    expect(report.distribution.byPrimaryCategory.numeric).toBe(1);
+    expect(report.distribution.byCategoryAssignment.numeric).toBe(1);
+    expect(report.distribution.byCategoryAssignment.exact_keyword).toBe(1);
+    expect(report.distribution.byCategoryAssignment.technical_term).toBe(1);
+  });
+
+  it('maps legacy category aliases to contract names', () => {
+    expect(normalizeCategories(['numeric_fact', 'identifier_exact_match', 'date_fact'])).toEqual([
+      'numeric',
+      'identifier',
+      'date',
+    ]);
   });
 
   it('rejects machine_generated marked as GOLD', () => {
@@ -150,6 +191,7 @@ describe('semantic gold schema', () => {
         id: stableCaseId(i + 1),
         query: `unique query ${i + 1} about ${cat} retry policy`,
         category: [cat],
+        primaryCategory: cat,
         annotationStatus: 'GOLD',
         provenance: 'human',
       });

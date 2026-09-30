@@ -7,11 +7,14 @@ import path from 'node:path';
 import {
   computeDatasetContentHash,
   validateSemanticGoldDataset,
+  normalizeCategories,
+  normalizeCategory,
+  type SemanticGoldCase,
   type SemanticGoldDataset,
 } from './schema';
 import { generateDraftCandidates } from './candidate';
 import { FileCorpusSnapshotRepository, buildCorpusSnapshot, loadFixtureCorpusAsSnapshot } from '../corpus/snapshot';
-import { assessGoldReadiness } from '../real/real-evaluation.runner';
+import { assessGoldReadiness } from '../readiness/readiness';
 
 function evalRoot(): string {
   return path.resolve(__dirname, '..', '..');
@@ -93,15 +96,39 @@ export function runGoldReadiness(root = evalRoot()): {
   humanCuratedGoldCount: number;
   reason: string;
   distribution: ReturnType<typeof validateSemanticGoldDataset>['distribution'];
+  missingCategories: string[];
 } {
   const dataset = loadSemanticGold(root);
   const corpus = loadFixtureCorpusAsSnapshot(root, dataset.corpusVersion);
   const validation = validateSemanticGoldDataset(dataset, corpus);
-  const readiness = assessGoldReadiness(dataset, corpus);
+  const report = assessGoldReadiness(dataset, corpus);
   return {
-    ...readiness,
+    ready: report.status === 'GOLD_READY',
+    humanCuratedGoldCount: validation.humanCuratedGoldCount,
+    reason:
+      report.status === 'GOLD_READY'
+        ? 'GOLD_READY'
+        : `SEMANTIC_BENCHMARK_NOT_READY: human-curated GOLD=${validation.humanCuratedGoldCount} < 50`,
     distribution: validation.distribution,
+    missingCategories: report.missingCategories,
   };
+}
+
+/** Normalize legacy category aliases in-place (numeric_fact→numeric, etc.). */
+export function runGoldNormalize(root = evalRoot()): { updated: number; path: string } {
+  const dataset = loadSemanticGold(root);
+  let updated = 0;
+  const cases: SemanticGoldCase[] = dataset.cases.map((c) => {
+    const cats = normalizeCategories(c.category ?? []);
+    const primary = normalizeCategory(c.primaryCategory || cats[0] || '');
+    const changed =
+      JSON.stringify(cats) !== JSON.stringify(c.category) || primary !== c.primaryCategory;
+    if (changed) updated += 1;
+    return { ...c, category: cats, primaryCategory: primary };
+  });
+  const next: SemanticGoldDataset = { ...dataset, cases, annotationStatus: dataset.annotationStatus };
+  const file = saveSemanticGold(next, root);
+  return { updated, path: file };
 }
 
 export function runCorpusSnapshotFromFixture(root = evalRoot()): {

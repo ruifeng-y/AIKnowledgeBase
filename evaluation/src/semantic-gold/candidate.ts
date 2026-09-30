@@ -28,9 +28,9 @@ function chunkRef(chunk: CorpusSnapshotMeta['chunks'][number], grade: RelevanceG
 
 function deriveCategory(content: string, index: number): string[] {
   const cats: string[] = [];
-  if (/\d{4}-\d{2}-\d{2}|\b20\d{2}\b/.test(content)) cats.push('date_fact');
-  if (/\b\d+(\.\d+)?%?\b/.test(content)) cats.push('numeric_fact');
-  if (/\b[A-Z]{2,}-\d+\b|\b[a-z]+_[a-z_]+\b/.test(content)) cats.push('identifier_exact_match');
+  if (/\d{4}-\d{2}-\d{2}|\b20\d{2}\b/.test(content)) cats.push('date');
+  if (/\b\d+(\.\d+)?%?\b/.test(content)) cats.push('numeric');
+  if (/\b[A-Z]{2,}-\d+\b|\b[a-z]+_[a-z_]+\b/.test(content)) cats.push('identifier');
   if (index % 3 === 0) cats.push('exact_keyword');
   if (index % 3 === 1) cats.push('semantic_paraphrase');
   if (index % 3 === 2) cats.push('technical_term');
@@ -60,6 +60,7 @@ export function generateDraftCandidates(
       corpusVersion: options.corpusVersion,
       query: titleish.length > 0 ? titleish : `information about ${chunk.chunkId}`,
       category: deriveCategory(chunk.content, i),
+      primaryCategory: deriveCategory(chunk.content, i)[0] ?? 'exact_keyword',
       answerability: 'answerable',
       expectedRelevantChunks: [chunkRef(chunk, 3)],
       relevanceGrades: { [chunk.chunkId]: 3 },
@@ -81,6 +82,7 @@ export function generateDraftCandidates(
       corpusVersion: options.corpusVersion,
       query: 'What is the office cafeteria menu for next Monday?',
       category: ['negative_query', 'no_answer'],
+      primaryCategory: 'no_answer',
       answerability: 'unanswerable',
       expectedRelevantChunks: [chunkRef(chunk, 0)],
       relevanceGrades: { [chunk.chunkId]: 0 },

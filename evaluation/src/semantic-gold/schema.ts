@@ -27,7 +27,10 @@ export interface SemanticGoldCase {
   datasetVersion: string;
   corpusVersion: string;
   query: string;
+  /** multi-label categories (contract names) */
   category: string[];
+  /** single primary category for case counting / coverage */
+  primaryCategory: string;
   answerability: Answerability;
   expectedRelevantChunks: SemanticGoldChunkRef[];
   relevanceGrades: Record<string, RelevanceGrade>;
@@ -90,28 +93,56 @@ export interface GoldValidationReport {
   machineGeneratedCount: number;
   issues: GoldValidationIssue[];
   distribution: {
-    byCategory: Record<string, number>;
+    /** case count by primaryCategory (one per case) */
+    byPrimaryCategory: Record<string, number>;
+    /** multi-label assignment count (sums to categoryAssignmentCount) */
+    byCategoryAssignment: Record<string, number>;
+    caseCount: number;
+    categoryAssignmentCount: number;
     byAnswerability: Record<string, number>;
     byAnnotationStatus: Record<string, number>;
+    byProvenance: Record<string, number>;
   };
   readiness: 'READY' | 'SEMANTIC_BENCHMARK_NOT_READY';
 }
 
 export const GOLD_MIN_HUMAN_CURATED = 50;
+
+/** Frozen contract category names. */
 export const REQUIRED_GOLD_CATEGORIES = [
   'exact_keyword',
   'semantic_paraphrase',
-  'identifier_exact_match',
+  'identifier',
   'technical_term',
   'multi_keyword',
-  'numeric_fact',
-  'date_fact',
+  'numeric',
+  'date',
   'negative_query',
   'version_specific',
   'cross_section',
   'no_answer',
   'prompt_injection',
 ] as const;
+
+/** Legacy V0.4-N aliases → contract category names. */
+export const CATEGORY_ALIASES: Record<string, string> = {
+  numeric_fact: 'numeric',
+  identifier_exact_match: 'identifier',
+  date_fact: 'date',
+};
+
+export function normalizeCategory(raw: string): string {
+  const trimmed = raw.trim();
+  return CATEGORY_ALIASES[trimmed] ?? trimmed;
+}
+
+export function normalizeCategories(raw: string[]): string[] {
+  const out = new Set<string>();
+  for (const c of raw) {
+    out.add(normalizeCategory(c));
+  }
+  return [...out];
+}
 
 export function stableCaseId(index: number): string {
   return `semantic-${String(index).padStart(4, '0')}`;
@@ -125,7 +156,8 @@ export function computeDatasetContentHash(dataset: Omit<SemanticGoldDataset, 'co
     cases: dataset.cases.map((c) => ({
       id: c.id,
       query: c.query,
-      category: c.category,
+      category: normalizeCategories(c.category ?? []),
+      primaryCategory: normalizeCategory(c.primaryCategory ?? c.category?.[0] ?? ''),
       answerability: c.answerability,
       expectedRelevantChunks: c.expectedRelevantChunks,
       relevanceGrades: c.relevanceGrades,
@@ -159,7 +191,8 @@ export function validateSemanticGoldDataset(
   corpus?: CorpusSnapshotMeta | null,
 ): GoldValidationReport {
   const issues: GoldValidationIssue[] = [];
-  const byCategory: Record<string, number> = {};
+  const byPrimaryCategory: Record<string, number> = {};
+  const byCategoryAssignment: Record<string, number> = {};
   const byAnswerability: Record<string, number> = { answerable: 0, unanswerable: 0 };
   const byAnnotationStatus: Record<string, number> = {
     DRAFT: 0,
@@ -167,6 +200,12 @@ export function validateSemanticGoldDataset(
     GOLD: 0,
     INVALID: 0,
   };
+  const byProvenance: Record<string, number> = {
+    human: 0,
+    machine_generated: 0,
+    machine_assisted: 0,
+  };
+  let categoryAssignmentCount = 0;
 
   const ids = new Set<string>();
   const queries = new Set<string>();
@@ -192,14 +231,29 @@ export function validateSemanticGoldDataset(
       }
     }
 
-    if (!c.category || c.category.length === 0) {
+    const cats = normalizeCategories(c.category ?? []);
+    const primary = normalizeCategory(c.primaryCategory || cats[0] || '');
+    if (!cats.length) {
       issues.push({ level: 'ERROR', code: 'MISSING_CATEGORY', caseId: c.id, message: 'category required' });
     } else {
-      for (const cat of c.category) {
-        byCategory[cat] = (byCategory[cat] ?? 0) + 1;
+      for (const cat of cats) {
+        byCategoryAssignment[cat] = (byCategoryAssignment[cat] ?? 0) + 1;
+        categoryAssignmentCount += 1;
         if (!(REQUIRED_GOLD_CATEGORIES as readonly string[]).includes(cat)) {
           issues.push({ level: 'WARNING', code: 'UNKNOWN_CATEGORY', caseId: c.id, message: `unknown category ${cat}` });
         }
+      }
+      if (!primary) {
+        issues.push({ level: 'ERROR', code: 'MISSING_PRIMARY_CATEGORY', caseId: c.id, message: 'primaryCategory required' });
+      } else if (!cats.includes(primary)) {
+        issues.push({
+          level: 'ERROR',
+          code: 'PRIMARY_NOT_IN_CATEGORIES',
+          caseId: c.id,
+          message: `primaryCategory ${primary} not in category[]`,
+        });
+      } else {
+        byPrimaryCategory[primary] = (byPrimaryCategory[primary] ?? 0) + 1;
       }
     }
 
@@ -213,6 +267,10 @@ export function validateSemanticGoldDataset(
       issues.push({ level: 'ERROR', code: 'INVALID_ANNOTATION_STATUS', caseId: c.id, message: `invalid status ${c.annotationStatus}` });
     } else {
       byAnnotationStatus[c.annotationStatus] += 1;
+    }
+
+    if (c.provenance in byProvenance) {
+      byProvenance[c.provenance] += 1;
     }
 
     if (c.provenance === 'machine_generated' && c.annotationStatus === 'GOLD') {
@@ -274,7 +332,7 @@ export function validateSemanticGoldDataset(
     issues.push({ level: 'WARNING', code: 'EMPTY_DATASET', message: 'semantic gold dataset has zero cases' });
   }
 
-  const requiredMissing = REQUIRED_GOLD_CATEGORIES.filter((cat) => !(cat in byCategory));
+  const requiredMissing = REQUIRED_GOLD_CATEGORIES.filter((cat) => !(cat in byCategoryAssignment));
   if (humanCuratedGoldCount >= GOLD_MIN_HUMAN_CURATED && requiredMissing.length > 0) {
     issues.push({
       level: 'ERROR',
@@ -306,7 +364,15 @@ export function validateSemanticGoldDataset(
     invalidCount: byAnnotationStatus.INVALID ?? 0,
     machineGeneratedCount,
     issues,
-    distribution: { byCategory, byAnswerability, byAnnotationStatus },
+    distribution: {
+      byPrimaryCategory,
+      byCategoryAssignment,
+      caseCount: dataset.cases.length,
+      categoryAssignmentCount,
+      byAnswerability,
+      byAnnotationStatus,
+      byProvenance,
+    },
     readiness: ready ? 'READY' : 'SEMANTIC_BENCHMARK_NOT_READY',
   };
 }

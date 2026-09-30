@@ -7,9 +7,14 @@ import type { EvaluationReport } from './types';
 import {
   runCorpusSnapshotFromFixture,
   runGoldCandidate,
+  runGoldNormalize,
   runGoldReadiness,
   runGoldValidate,
 } from './semantic-gold/gold-cli';
+import { assessGoldReadiness, buildCombinedReadiness } from './readiness/readiness';
+import { classifyProviderReadiness } from './readiness/provider-readiness';
+import { loadSemanticGold } from './semantic-gold/gold-cli';
+import { loadFixtureCorpusAsSnapshot } from './corpus/snapshot';
 
 function parseArgs(argv: string[]): Record<string, string> {
   const out: Record<string, string> = {};
@@ -227,9 +232,31 @@ async function main(): Promise<void> {
   } else if (cmd === 'corpus:snapshot') {
     const result = runCorpusSnapshotFromFixture();
     console.log(JSON.stringify(result, null, 2));
+  } else if (cmd === 'gold:normalize') {
+    const result = runGoldNormalize();
+    console.log(JSON.stringify(result, null, 2));
+  } else if (cmd === 'provider:readiness') {
+    const report = classifyProviderReadiness();
+    console.log(JSON.stringify(report, null, 2));
+    console.log(report.allReady ? 'REAL_PROVIDER_READY' : 'REAL_PROVIDER_NOT_READY');
+  } else if (cmd === 'readiness') {
+    const root = defaultEvaluationRoot();
+    const dataset = loadSemanticGold(root);
+    const corpus = loadFixtureCorpusAsSnapshot(root, dataset.corpusVersion);
+    const gold = assessGoldReadiness(dataset, corpus);
+    const provider = classifyProviderReadiness();
+    const combined = buildCombinedReadiness(gold, provider);
+    console.log(JSON.stringify(combined, null, 2));
+    if (combined.REAL_BENCHMARK_READY) {
+      console.log('V0.5-C REAL BENCHMARK READY');
+    } else {
+      console.log('V0.5-C READINESS BLOCKED');
+      if (!combined.GOLD_READY) console.log('SEMANTIC_BENCHMARK_NOT_READY');
+      if (!combined.REAL_PROVIDER_READY) console.log('REAL_PROVIDER_NOT_READY');
+    }
   } else {
     console.error(
-      'usage: tsx cli.ts [contract|benchmark|baseline|compare|write-datasets|gold:candidate|gold:validate|gold:readiness|corpus:snapshot]',
+      'usage: tsx cli.ts [contract|benchmark|baseline|compare|write-datasets|gold:candidate|gold:validate|gold:readiness|gold:normalize|corpus:snapshot|provider:readiness|readiness]',
     );
     process.exitCode = 1;
   }

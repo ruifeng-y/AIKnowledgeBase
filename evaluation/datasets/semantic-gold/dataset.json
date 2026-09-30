@@ -11,7 +11,7 @@
       "corpusVersion": "corpus-2026-09-22-v1",
       "query": "The API path POST /api/v1/spaces/:spaceId/search/hybrid performs hybrid retrieval",
       "category": [
-        "numeric_fact",
+        "numeric",
         "exact_keyword"
       ],
       "answerability": "answerable",
@@ -35,14 +35,15 @@
       "annotationStatus": "DRAFT",
       "provenance": "machine_generated",
       "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
-      "annotationTimestamp": "2026-09-30T19:56:11.326Z"
+      "annotationTimestamp": "2026-09-30T19:56:11.326Z",
+      "primaryCategory": "numeric"
     },
     {
       "id": "semantic-0002",
       "corpusVersion": "corpus-2026-09-22-v1",
       "query": "final topK defaults to 10 and candidateK defaults",
       "category": [
-        "numeric_fact",
+        "numeric",
         "semantic_paraphrase"
       ],
       "answerability": "answerable",
@@ -66,14 +67,15 @@
       "annotationStatus": "DRAFT",
       "provenance": "machine_generated",
       "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
-      "annotationTimestamp": "2026-09-30T19:56:11.327Z"
+      "annotationTimestamp": "2026-09-30T19:56:11.327Z",
+      "primaryCategory": "numeric"
     },
     {
       "id": "semantic-0003",
       "corpusVersion": "corpus-2026-09-22-v1",
       "query": "JWT authentication older note: Access Token lifetime was",
       "category": [
-        "numeric_fact",
+        "numeric",
         "technical_term"
       ],
       "answerability": "answerable",
@@ -97,14 +99,15 @@
       "annotationStatus": "DRAFT",
       "provenance": "machine_generated",
       "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
-      "annotationTimestamp": "2026-09-30T19:56:11.327Z"
+      "annotationTimestamp": "2026-09-30T19:56:11.327Z",
+      "primaryCategory": "numeric"
     },
     {
       "id": "semantic-0004",
       "corpusVersion": "corpus-2026-09-22-v1",
       "query": "JWT authentication uses Access Token with 15 minutes",
       "category": [
-        "numeric_fact",
+        "numeric",
         "exact_keyword"
       ],
       "answerability": "answerable",
@@ -128,10 +131,11 @@
       "annotationStatus": "DRAFT",
       "provenance": "machine_generated",
       "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
-      "annotationTimestamp": "2026-09-30T19:56:11.327Z"
+      "annotationTimestamp": "2026-09-30T19:56:11.327Z",
+      "primaryCategory": "numeric"
     }
   ],
   "corpusVersion": "corpus-2026-09-22-v1",
   "annotationStatus": "DRAFT",
-  "contentHash": "0dcf6b3eecceb2671b0b3b569dc13d39"
+  "contentHash": "bef18083bd87e5fda43bc54dbd880e67"
 }

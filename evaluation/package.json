@@ -11,7 +11,10 @@
     "evaluation:gold:candidate": "tsx src/cli.ts gold:candidate",
     "evaluation:gold:validate": "tsx src/cli.ts gold:validate",
     "evaluation:gold:readiness": "tsx src/cli.ts gold:readiness",
+    "evaluation:gold:normalize": "tsx src/cli.ts gold:normalize",
     "evaluation:corpus:snapshot": "tsx src/cli.ts corpus:snapshot",
+    "evaluation:provider:readiness": "tsx src/cli.ts provider:readiness",
+    "evaluation:readiness": "tsx src/cli.ts readiness",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src"

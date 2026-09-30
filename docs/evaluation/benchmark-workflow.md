@@ -17,9 +17,22 @@
 pnpm evaluation:contract                 # Mock pipeline contract (CI)
 pnpm --filter @akb/evaluation evaluation:corpus:snapshot
 pnpm --filter @akb/evaluation evaluation:gold:candidate
+pnpm --filter @akb/evaluation evaluation:gold:normalize
 pnpm --filter @akb/evaluation evaluation:gold:validate
 pnpm --filter @akb/evaluation evaluation:gold:readiness
+pnpm --filter @akb/evaluation evaluation:provider:readiness
+pnpm --filter @akb/evaluation evaluation:readiness   # GOLD_READY + REAL_PROVIDER_READY
 pnpm evaluation:benchmark                # requires READY gold + real providers
+```
+
+## Dual gate
+
+```text
+GOLD_READY (human GOLD >= 50 + 12 categories + integrity)
++
+REAL_PROVIDER_READY (Embedding + Reranker + LLM)
+=
+REAL_BENCHMARK_READY
 ```
 
 ## Immutability
