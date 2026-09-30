@@ -8,6 +8,10 @@
     "evaluation:benchmark": "tsx src/cli.ts benchmark",
     "evaluation:baseline": "tsx src/cli.ts baseline",
     "evaluation:compare": "tsx src/cli.ts compare",
+    "evaluation:gold:candidate": "tsx src/cli.ts gold:candidate",
+    "evaluation:gold:validate": "tsx src/cli.ts gold:validate",
+    "evaluation:gold:readiness": "tsx src/cli.ts gold:readiness",
+    "evaluation:corpus:snapshot": "tsx src/cli.ts corpus:snapshot",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src"

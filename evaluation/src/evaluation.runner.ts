@@ -1,11 +1,9 @@
 import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import os from 'node:os';
-import path from 'node:path';
 import {
   DEFAULT_EMBEDDING_CONFIG,
   MockEmbeddingProvider,
-  mockVector,
 } from '../../packages/ai/src/index';
 import { VectorSearchApplicationService } from '../../apps/api/src/modules/retrieval/application/vector-search.application.service';
 import { HybridSearchApplicationService } from '../../apps/api/src/modules/retrieval/application/hybrid-search.application.service';
@@ -56,7 +54,6 @@ import {
   type EvaluationRunRequest,
   type EvaluationRunResult,
   type EvaluationRunnerPort,
-  type FailureClass,
   type RelevanceGrade,
 } from './types';
 
@@ -263,7 +260,6 @@ export class EvaluationRunner implements EvaluationRunnerPort {
 
     const answerable = dataset.cases.filter((c) => c.answerable);
     const unanswerable = dataset.cases.filter((c) => !c.answerable);
-    const ragResults = caseResults.filter((_, i) => dataset.cases[i]!.answerable && isRag);
 
     const contextRecalls: number[] = [];
     const contextPrecisions: number[] = [];
@@ -313,12 +309,13 @@ export class EvaluationRunner implements EvaluationRunnerPort {
                 return g < 2 && cr.contextChunkIds.includes(id);
               }).length > 0
               ? // approximate: citations map 1:1 with context order in mock
-                (cr.citations ?? []).length > 0 &&
-                cr.citations.filter((_, ci) => (gradeMap.get(cr.contextChunkIds[ci] ?? '') ?? 0) < 2)
-                  .length
+                ((cr.citations ?? []).length > 0 &&
+                  cr.citations.filter((_, ci) => (gradeMap.get(cr.contextChunkIds[ci] ?? '') ?? 0) < 2)
+                    .length) ||
+                0
               : 0
             : 0;
-          unsupportedRates.push(unsupportedCitationRate(unsupported, cr.citations.length));
+          unsupportedRates.push(unsupportedCitationRate(Number(unsupported) || 0, cr.citations.length));
         } else {
           abstainCases += 1;
           if (
@@ -545,7 +542,7 @@ export class EvaluationRunner implements EvaluationRunnerPort {
       let retrievedChunkIds: string[] = [];
       let rrfCandidateCount = 0;
       let vectorCandidateCount = 0;
-      let lexicalCandidateCount = 0;
+      const lexicalCandidateCount = 0;
       if (profile.profileId === 'vector-baseline') {
         const res = await services.vectorService.search(ownerId, spaceId, {
           query: evalCase.query,

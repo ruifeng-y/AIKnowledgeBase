@@ -5,5 +5,133 @@
   "description": "Semantic gold dataset scaffold. Capacity for 50+ curated cases. Status NOT READY until human-curated ground truth is available.",
   "corpusSnapshotId": "corpus-2026-09-22-v1",
   "status": "NOT_READY",
-  "cases": []
+  "cases": [
+    {
+      "id": "semantic-0001",
+      "corpusVersion": "corpus-2026-09-22-v1",
+      "query": "The API path POST /api/v1/spaces/:spaceId/search/hybrid performs hybrid retrieval",
+      "category": [
+        "numeric_fact",
+        "exact_keyword"
+      ],
+      "answerability": "answerable",
+      "expectedRelevantChunks": [
+        {
+          "chunkId": "chunk-api-001",
+          "documentId": "doc-api",
+          "documentVersionId": "ver-api-v1",
+          "chunkIndex": 0,
+          "contentHash": "fce0e0ccde2f089342a761e4ca1786a9",
+          "relevanceGrade": 3
+        }
+      ],
+      "relevanceGrades": {
+        "chunk-api-001": 3
+      },
+      "referenceAnswer": "The API path POST /api/v1/spaces/:spaceId/search/hybrid performs hybrid retrieval with rrfK = 60.",
+      "expectedCitationSources": [
+        "chunk-api-001"
+      ],
+      "annotationStatus": "DRAFT",
+      "provenance": "machine_generated",
+      "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
+      "annotationTimestamp": "2026-09-30T19:56:11.326Z"
+    },
+    {
+      "id": "semantic-0002",
+      "corpusVersion": "corpus-2026-09-22-v1",
+      "query": "final topK defaults to 10 and candidateK defaults",
+      "category": [
+        "numeric_fact",
+        "semantic_paraphrase"
+      ],
+      "answerability": "answerable",
+      "expectedRelevantChunks": [
+        {
+          "chunkId": "chunk-api-002",
+          "documentId": "doc-api",
+          "documentVersionId": "ver-api-v1",
+          "chunkIndex": 1,
+          "contentHash": "f2e1ae720b5cf7abe5ecda2c7f784a82",
+          "relevanceGrade": 3
+        }
+      ],
+      "relevanceGrades": {
+        "chunk-api-002": 3
+      },
+      "referenceAnswer": "final topK defaults to 10 and candidateK defaults to 50 for hybrid search.",
+      "expectedCitationSources": [
+        "chunk-api-002"
+      ],
+      "annotationStatus": "DRAFT",
+      "provenance": "machine_generated",
+      "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
+      "annotationTimestamp": "2026-09-30T19:56:11.327Z"
+    },
+    {
+      "id": "semantic-0003",
+      "corpusVersion": "corpus-2026-09-22-v1",
+      "query": "JWT authentication older note: Access Token lifetime was",
+      "category": [
+        "numeric_fact",
+        "technical_term"
+      ],
+      "answerability": "answerable",
+      "expectedRelevantChunks": [
+        {
+          "chunkId": "chunk-auth-000",
+          "documentId": "doc-auth",
+          "documentVersionId": "ver-auth-v1",
+          "chunkIndex": 0,
+          "contentHash": "f7642fa9b74c84d05b74d51ff3912445",
+          "relevanceGrade": 3
+        }
+      ],
+      "relevanceGrades": {
+        "chunk-auth-000": 3
+      },
+      "referenceAnswer": "JWT authentication older note: Access Token lifetime was documented as 15 minutes in version 1.",
+      "expectedCitationSources": [
+        "chunk-auth-000"
+      ],
+      "annotationStatus": "DRAFT",
+      "provenance": "machine_generated",
+      "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
+      "annotationTimestamp": "2026-09-30T19:56:11.327Z"
+    },
+    {
+      "id": "semantic-0004",
+      "corpusVersion": "corpus-2026-09-22-v1",
+      "query": "JWT authentication uses Access Token with 15 minutes",
+      "category": [
+        "numeric_fact",
+        "exact_keyword"
+      ],
+      "answerability": "answerable",
+      "expectedRelevantChunks": [
+        {
+          "chunkId": "chunk-auth-001",
+          "documentId": "doc-auth",
+          "documentVersionId": "ver-auth-v2",
+          "chunkIndex": 0,
+          "contentHash": "3e07edc47a1a9ee92e6310896d21adce",
+          "relevanceGrade": 3
+        }
+      ],
+      "relevanceGrades": {
+        "chunk-auth-001": 3
+      },
+      "referenceAnswer": "JWT authentication uses Access Token with 15 minutes lifetime and Refresh Token with 7 days lifetime.",
+      "expectedCitationSources": [
+        "chunk-auth-001"
+      ],
+      "annotationStatus": "DRAFT",
+      "provenance": "machine_generated",
+      "annotationNotes": "Machine-generated candidate. Requires human review before GOLD.",
+      "annotationTimestamp": "2026-09-30T19:56:11.327Z"
+    }
+  ],
+  "corpusVersion": "corpus-2026-09-22-v1",
+  "annotationStatus": "DRAFT",
+  "contentHash": "0dcf6b3eecceb2671b0b3b569dc13d39"
 }

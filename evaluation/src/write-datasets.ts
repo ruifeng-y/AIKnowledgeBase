@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { contentHashOf } from './dataset.repository';
 import type { CorpusChunk, CorpusSnapshot, EvaluationCase, EvaluationDataset, RelevanceGrade } from './types';
@@ -539,32 +539,41 @@ export function writeEvaluationDatasets(): void {
     JSON.stringify(buildDataset(corpus.corpusSnapshotId), null, 2),
     'utf8',
   );
-  writeFileSync(
-    path.join(goldDir, 'dataset.json'),
-    JSON.stringify(buildSemanticGold(), null, 2),
-    'utf8',
-  );
-  writeFileSync(
-    path.join(goldDir, 'STATUS.md'),
-    [
-      '# semantic-gold',
-      '',
-      'Status: **NOT READY**',
-      '',
-      'Capacity: schema supports >= 50 curated cases.',
-      '',
-      'Do not fabricate production-quality ground truth to meet the count requirement.',
-      '',
-      'When ready, add human-reviewed EvaluationCase entries with relevanceGrade 0-3 and contentHash-bound RelevantChunk.',
-      '',
-    ].join('\n'),
-    'utf8',
-  );
+  // Never overwrite an existing semantic-gold dataset (immutability / human curation).
+  const goldPath = path.join(goldDir, 'dataset.json');
+  let goldCaseCount = 0;
+  if (existsSync(goldPath)) {
+    try {
+      const existing = JSON.parse(readFileSync(goldPath, 'utf8')) as { cases?: unknown[] };
+      goldCaseCount = Array.isArray(existing.cases) ? existing.cases.length : 0;
+    } catch {
+      goldCaseCount = 0;
+    }
+  }
+  if (!existsSync(goldPath) || goldCaseCount === 0) {
+    writeFileSync(goldPath, JSON.stringify(buildSemanticGold(), null, 2), 'utf8');
+    writeFileSync(
+      path.join(goldDir, 'STATUS.md'),
+      [
+        '# semantic-gold',
+        '',
+        'Status: **NOT READY**',
+        '',
+        'Capacity: schema supports >= 50 curated cases.',
+        '',
+        'Do not fabricate production-quality ground truth to meet the count requirement.',
+        '',
+        'When ready, add human-reviewed EvaluationCase entries with relevanceGrade 0-3 and contentHash-bound RelevantChunk.',
+        '',
+      ].join('\n'),
+      'utf8',
+    );
+  }
   console.log(
     JSON.stringify({
       contractCases: buildCases().length,
       corpusChunks: corpus.chunks.length,
-      semanticGold: 'NOT_READY',
+      semanticGold: goldCaseCount > 0 ? `PRESERVED(${goldCaseCount} cases)` : 'NOT_READY',
     }),
   );
 }

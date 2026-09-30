@@ -1,9 +1,15 @@
 import { readFileSync, writeFileSync, copyFileSync, existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { EvaluationRunner } from './evaluation.runner';
-import { defaultEvaluationRoot, FileEvaluationReportRepository } from './dataset.repository';
+import { defaultEvaluationRoot } from './dataset.repository';
 import { writeEvaluationDatasets } from './write-datasets';
 import type { EvaluationReport } from './types';
+import {
+  runCorpusSnapshotFromFixture,
+  runGoldCandidate,
+  runGoldReadiness,
+  runGoldValidate,
+} from './semantic-gold/gold-cli';
 
 function parseArgs(argv: string[]): Record<string, string> {
   const out: Record<string, string> = {};
@@ -202,8 +208,29 @@ async function main(): Promise<void> {
     await cmdCompare();
   } else if (cmd === 'write-datasets') {
     writeEvaluationDatasets();
+  } else if (cmd === 'gold:candidate') {
+    const result = runGoldCandidate();
+    console.log(JSON.stringify(result, null, 2));
+  } else if (cmd === 'gold:validate') {
+    const result = runGoldValidate();
+    console.log(JSON.stringify(result, null, 2));
+    if (!result.ok) {
+      process.exitCode = 1;
+    }
+  } else if (cmd === 'gold:readiness') {
+    const result = runGoldReadiness();
+    console.log(JSON.stringify(result, null, 2));
+    console.log(result.ready ? 'SEMANTIC_BENCHMARK_READY' : 'SEMANTIC_BENCHMARK_NOT_READY');
+    if (!result.ready) {
+      process.exitCode = 0; // tooling works; readiness gate is informational unless forced
+    }
+  } else if (cmd === 'corpus:snapshot') {
+    const result = runCorpusSnapshotFromFixture();
+    console.log(JSON.stringify(result, null, 2));
   } else {
-    console.error('usage: tsx cli.ts [contract|benchmark|baseline|compare|write-datasets]');
+    console.error(
+      'usage: tsx cli.ts [contract|benchmark|baseline|compare|write-datasets|gold:candidate|gold:validate|gold:readiness|corpus:snapshot]',
+    );
     process.exitCode = 1;
   }
 }
