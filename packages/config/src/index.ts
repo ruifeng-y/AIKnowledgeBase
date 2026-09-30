@@ -1,4 +1,4 @@
-/** Minimal config skeleton. Full env loading arrives in later phases. */
+/** Shared runtime configuration. Provider config lives in ./provider-config. */
 export const CONFIG_PACKAGE = '@akb/config' as const;
 
 export type NodeEnv = 'development' | 'test' | 'production';
@@ -15,7 +15,6 @@ export function readBaseRuntimeConfig(
   const rawNodeEnv = env['NODE_ENV'];
   const nodeEnv: NodeEnv =
     rawNodeEnv === 'production' || rawNodeEnv === 'test' ? rawNodeEnv : 'development';
-
   return {
     nodeEnv,
     apiPort: parsePort(env['API_PORT'], 3001),
@@ -30,3 +29,5 @@ function parsePort(raw: string | undefined, fallback: number): number {
   const parsed = Number.parseInt(raw, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
+
+export * from './provider-config';

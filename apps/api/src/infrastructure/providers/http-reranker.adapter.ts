@@ -6,7 +6,7 @@ import type {
 } from '../../modules/retrieval/domain/reranker.port';
 import { RerankerError, sliceRerankBatches } from '../../modules/retrieval/domain/reranker.port';
 import { providerHttpPost } from './http-transport';
-import { ProviderError, logProviderMetric } from './provider-error';
+import { ProviderError, logProviderMetric, logProviderStarted } from './provider-error';
 import type { RerankerProviderConfig } from './provider-config';
 import { validateProductionProviderConfig } from './provider-config';
 
@@ -32,6 +32,11 @@ export class HttpRerankerAdapter implements RerankerProviderPort {
   async rerank(inputs: RerankInput[]): Promise<RerankResult[]> {
     const started = Date.now();
     const query = inputs[0]?.query ?? '';
+    logProviderStarted({
+      operation: 'reranker',
+      provider: this.config.providerId,
+      model: this.config.modelId,
+    });
     try {
       const batches = sliceRerankBatches(inputs, this.config.batchSize);
       const results: RerankResult[] = [];
@@ -55,7 +60,7 @@ export class HttpRerankerAdapter implements RerankerProviderPort {
       logProviderMetric({
         provider: this.config.providerId,
         model: this.config.modelId,
-        operation: 'rerank',
+        operation: 'reranker',
         latencyMs: Date.now() - started,
         success: true,
         retryCount: 0,
@@ -67,7 +72,7 @@ export class HttpRerankerAdapter implements RerankerProviderPort {
       logProviderMetric({
         provider: this.config.providerId,
         model: this.config.modelId,
-        operation: 'rerank',
+        operation: 'reranker',
         latencyMs: Date.now() - started,
         success: false,
         errorCode: error instanceof ProviderError ? error.code : 'RERANKER_INVALID_RESPONSE',

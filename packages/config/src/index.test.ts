@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONFIG_PACKAGE, readBaseRuntimeConfig } from '../src/index';
+import { CONFIG_PACKAGE, readBaseRuntimeConfig } from './index';
 
 describe('@akb/config skeleton', () => {
   it('exports package name', () => {

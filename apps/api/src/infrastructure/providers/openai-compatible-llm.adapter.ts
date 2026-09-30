@@ -5,7 +5,7 @@ import type {
   LlmProviderPort,
 } from '../../modules/retrieval/domain/rag.port';
 import { providerHttpPost } from './http-transport';
-import { ProviderError, logProviderMetric } from './provider-error';
+import { ProviderError, logProviderMetric, logProviderStarted } from './provider-error';
 import type { LlmProviderConfig } from './provider-config';
 import { validateProductionProviderConfig } from './provider-config';
 
@@ -33,6 +33,11 @@ export class OpenAICompatibleLlmAdapter implements LlmProviderPort {
 
   async generate(input: LlmGenerateInput): Promise<LlmGenerateResult> {
     const started = Date.now();
+    logProviderStarted({
+      operation: 'llm',
+      provider: this.config.providerId,
+      model: this.config.modelId,
+    });
     try {
       const payload = await providerHttpPost({
         provider: this.config.providerId,

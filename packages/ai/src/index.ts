@@ -82,12 +82,25 @@ export const DEFAULT_EMBEDDING_CONFIG: EmbeddingModelConfig = {
   batchSize: 32,
 };
 
+/**
+ * Map normalized provider config to EmbeddingModelConfig.
+ * Prefer packages/config loaders; this helper only adapts the shape.
+ */
 export function loadEmbeddingConfig(
   env: Record<string, string | undefined> = process.env,
 ): EmbeddingModelConfig {
-  const provider = env['EMBEDDING_PROVIDER']?.trim() || DEFAULT_EMBEDDING_CONFIG.provider;
-  const model = env['EMBEDDING_MODEL']?.trim() || DEFAULT_EMBEDDING_CONFIG.model;
-  const dimension = Number.parseInt(env['EMBEDDING_DIMENSION'] ?? '', 10);
+  const provider =
+    env['EMBEDDING_PROVIDER_ID']?.trim() ||
+    env['EMBEDDING_PROVIDER']?.trim() ||
+    DEFAULT_EMBEDDING_CONFIG.provider;
+  const model =
+    env['EMBEDDING_MODEL_ID']?.trim() ||
+    env['EMBEDDING_MODEL']?.trim() ||
+    DEFAULT_EMBEDDING_CONFIG.model;
+  const dimension = Number.parseInt(
+    env['EMBEDDING_DIMENSIONS'] ?? env['EMBEDDING_DIMENSION'] ?? '',
+    10,
+  );
   const batchSize = Number.parseInt(env['EMBEDDING_BATCH_SIZE'] ?? '', 10);
   const config: EmbeddingModelConfig = {
     provider,
@@ -163,3 +176,29 @@ export class MockEmbeddingProvider implements EmbeddingProviderPort {
     };
   }
 }
+
+import {
+  assertCapabilityMockAllowed,
+  isMockProvider,
+  loadEmbeddingProviderConfig,
+  validateProviderConfig,
+  type EmbeddingProviderConfig,
+} from '@akb/config';
+import { HttpEmbeddingAdapter, toEmbeddingModelConfig } from './embedding-adapter';
+
+export * from './embedding-adapter';
+
+/** Unique embedding resolution entry for Worker and API Registry. */
+export function resolveEmbeddingProvider(
+  config: EmbeddingProviderConfig = loadEmbeddingProviderConfig(),
+  env: Record<string, string | undefined> = process.env,
+): EmbeddingProviderPort {
+  validateProviderConfig(config);
+  assertCapabilityMockAllowed('embedding', config.providerId, env);
+  if (isMockProvider(config.providerId)) {
+    return new MockEmbeddingProvider(toEmbeddingModelConfig(config));
+  }
+  return new HttpEmbeddingAdapter(config);
+}
+
+export { loadEmbeddingProviderConfig, isMockProvider, assertCapabilityMockAllowed };

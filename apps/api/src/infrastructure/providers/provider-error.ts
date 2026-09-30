@@ -95,7 +95,33 @@ export interface ProviderMetric {
   totalTokens?: number | null;
 }
 
+/** Observability must never break the business path. */
 export function logProviderMetric(metric: ProviderMetric): void {
-  // metadata only — never logs secrets, prompts, or full provider payloads
-  console.log(JSON.stringify({ event: 'provider_metric', ...metric }));
+  try {
+    const event = metric.success ? 'provider.request.completed' : 'provider.request.failed';
+    console.log(JSON.stringify({ event, ...metric }));
+  } catch {
+    // swallow observability failures
+  }
+}
+
+export function logProviderStarted(input: {
+  requestId?: string;
+  operation: string;
+  provider: string;
+  model: string;
+}): void {
+  try {
+    console.log(JSON.stringify({ event: 'provider.request.started', ...input }));
+  } catch {
+    // ignore
+  }
+}
+
+export function logProviderFailed(metric: ProviderMetric): void {
+  try {
+    console.log(JSON.stringify({ event: 'provider.request.failed', ...metric, success: false }));
+  } catch {
+    // ignore
+  }
 }

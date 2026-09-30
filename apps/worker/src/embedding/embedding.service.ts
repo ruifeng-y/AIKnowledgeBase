@@ -1,13 +1,13 @@
 import {
   DEFAULT_EMBEDDING_CONFIG,
   EmbeddingError,
-  loadEmbeddingConfig,
-  MockEmbeddingProvider,
   normalizeEmbeddingText,
   validateEmbeddingVector,
   type EmbeddingModelConfig,
   type EmbeddingProviderPort,
 } from '@akb/ai';
+import { loadEmbeddingProviderConfig } from '@akb/config';
+import { resolveEmbeddingProvider, toEmbeddingModelConfig } from '@akb/ai';
 import { embeddingRecordRepository, knowledgeChunkRepository } from '@akb/db';
 
 export interface EmbeddingJobPayload {
@@ -32,11 +32,26 @@ export class EmbeddingService {
     private readonly config: EmbeddingModelConfig = DEFAULT_EMBEDDING_CONFIG,
   ) {}
 
+  /**
+   * Resolve embedding provider via config + registry-style factory.
+   * Production never silently falls back to Mock.
+   */
+  static create(
+    provider: EmbeddingProviderPort,
+    config: EmbeddingModelConfig = DEFAULT_EMBEDDING_CONFIG,
+  ): EmbeddingService {
+    return new EmbeddingService(provider, config);
+  }
+
+  static createFromEnv(env: Record<string, string | undefined> = process.env): EmbeddingService {
+    const providerConfig = loadEmbeddingProviderConfig(env);
+    const provider = resolveEmbeddingProvider(providerConfig, env);
+    return new EmbeddingService(provider, toEmbeddingModelConfig(providerConfig));
+  }
+
+  /** @deprecated production code must use createFromEnv / create; tests inject Mock explicitly. */
   static createDefault(): EmbeddingService {
-    const config = loadEmbeddingConfig(process.env);
-    // Production / mock selected via EMBEDDING_PROVIDER; registry lives in API infrastructure.
-    // Worker keeps local mock construction for default test/dev paths.
-    return new EmbeddingService(new MockEmbeddingProvider(config), config);
+    return EmbeddingService.createFromEnv(process.env);
   }
 
   async embedDocumentVersion(payload: EmbeddingJobPayload): Promise<EmbeddingStats> {
@@ -65,7 +80,6 @@ export class EmbeddingService {
       const slice = chunks.slice(i, i + batchSize);
       const texts = slice.map((chunk) => normalizeEmbeddingText(chunk.content));
       if (texts.some((text) => text.length === 0)) {
-        // Do not persist partial invalid batch.
         throw new EmbeddingError('EMBEDDING_EMPTY_CONTENT', 'empty chunk content in batch');
       }
 
@@ -86,7 +100,6 @@ export class EmbeddingService {
         );
       }
 
-      // Validate ALL before persisting batch.
       for (const item of vectors) {
         validateEmbeddingVector(item.vector, this.config.dimension);
       }

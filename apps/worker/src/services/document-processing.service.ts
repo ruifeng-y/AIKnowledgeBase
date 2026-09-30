@@ -24,7 +24,7 @@ export class DocumentProcessingService {
     private readonly storage: ObjectStoragePort,
     private readonly registry = parserRegistry,
     private readonly chunking = new StructureAwareChunkingStrategy(),
-    private readonly embedding = EmbeddingService.createDefault(),
+    private readonly embedding = EmbeddingService.createFromEnv(),
   ) {}
 
   async process(
